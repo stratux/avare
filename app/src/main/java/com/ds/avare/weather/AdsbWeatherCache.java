@@ -30,7 +30,6 @@ import com.ds.avare.shapes.DrawingContext;
 import com.ds.avare.storage.DataSource;
 import com.ds.avare.storage.Preferences;
 import com.ds.avare.utils.BitmapHolder;
-import com.ds.avare.utils.DisplayUatTowerIcon;
 import com.ds.avare.utils.RateLimitedBackgroundQueue;
 import com.ds.avare.utils.WeatherHelper;
 
@@ -171,21 +170,26 @@ public class AdsbWeatherCache {
             if ((found==0) && (metarArray[i].endsWith("KT")))
             {
                 found=1;
-                // We found the winds, lets process it
-                windString = metarArray[i];
+                try {
+                    // We found the winds, lets process it
+                    windString = metarArray[i];
 
-                windSub = windString.substring(0,3);
-                // Handle 'VRB'
-                if (windSub.contains("VRB"))
-                    direction = 0;
-                else
-                    direction = Integer.parseInt(windSub);
-                wind = Integer.parseInt(windString.substring(3,5));
-                if (windString.contains("G")) {
-                    gusts = windString.substring(5,8);
+                    windSub = windString.substring(0, 3);
+                    // Handle 'VRB'
+                    if (windSub.contains("VRB"))
+                        direction = 0;
+                    else
+                        direction = Integer.parseInt(windSub);
+                    wind = Integer.parseInt(windString.substring(3, 5));
+                    if (windString.contains("G")) {
+                        gusts = windString.substring(5, 8);
+                    } else {
+                        gusts = "";
+                    }
                 }
-                else {
-                    gusts="";
+                catch (Exception e) {
+                    // An exception was caught, quit and do not display a barb at all
+                    return;
                 }
             }
         }
