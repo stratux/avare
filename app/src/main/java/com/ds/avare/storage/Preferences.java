@@ -158,6 +158,9 @@ public class Preferences {
         if (val.equals("0")) {
             return "http://avare.stratux.me/old/";
         }
+        if (val.equals("1")) {
+            return "http://192.168.0.2:83/new/";
+        }
         return ("");
     }
 

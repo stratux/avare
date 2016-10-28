@@ -1916,6 +1916,7 @@ Redistribution and use in source and binary forms, with or without modification,
     
     <string-array name="Server">
         <item>avare.stratux.me</item>
+        <item>192.168.0.2</item>
     </string-array>
 
     <string-array name="ServerValues">

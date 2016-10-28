@@ -11,7 +11,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.SystemClock;
+import android.widget.Button;
 
+import com.ds.avare.animation.TwoButton;
 import com.ds.avare.instruments.CDI;
 import com.ds.avare.message.Logger;
 import com.ds.avare.place.Destination;
@@ -307,13 +309,13 @@ public class IWebsocketService extends Service {
     public void HandleRawDataMessage(JSONObject object)
     {
         try {
-            int iMonth = object.getInt("FISB_month");
-            int iDay = object.getInt("FISB_day");
-            int iHours = object.getInt("FISB_hours");
-            int iMin = object.getInt("FISB_minutes");
-            int iSec = object.getInt("FISB_seconds");
-            int iFISBLen = object.getInt("FISB_length");
-            int iProductId = object.getInt("Product_id");
+            final int iMonth = object.getInt("FISB_month");
+            final int iDay = object.getInt("FISB_day");
+            final int iHours = object.getInt("FISB_hours");
+            final int iMin = object.getInt("FISB_minutes");
+            final int iSec = object.getInt("FISB_seconds");
+            final int iFISBLen = object.getInt("FISB_length");
+            final int iProductId = object.getInt("Product_id");
 
             switch(iProductId) {
                 case 63:
@@ -322,14 +324,14 @@ public class IWebsocketService extends Service {
                     if (jArray != null) {
                         for (int i = 0; i < jArray.length(); i++) {
                             JSONObject jobj2 = jArray.getJSONObject(i);
-                            int mBlock = jobj2.getInt("Block");
-                            int rType=jobj2.getInt("Radar_Type");
-                            int Scale=jobj2.getInt("Scale");
-                            double LatNorth = jobj2.getDouble("LatNorth");
-                            double LonWest = jobj2.getDouble("LonWest");
-                            double Height = jobj2.getDouble("Height");
-                            double Width = jobj2.getDouble("Width");
-                            JSONArray jIntensityArray = jobj2.getJSONArray("Intensity");
+                            final int mBlock = jobj2.getInt("Block");
+                            final int rType=jobj2.getInt("Radar_Type");
+                            final int Scale=jobj2.getInt("Scale");
+                            final double LatNorth = jobj2.getDouble("LatNorth");
+                            final double LonWest = jobj2.getDouble("LonWest");
+                            final double Height = jobj2.getDouble("Height");
+                            final double Width = jobj2.getDouble("Width");
+                            final JSONArray jIntensityArray = jobj2.getJSONArray("Intensity");
                             int IntensityLen = jIntensityArray.length();
                             int IntensityArray[] = new int[IntensityLen];
                             for (int j=0; j<IntensityLen; j++) {
@@ -339,10 +341,8 @@ public class IWebsocketService extends Service {
                             mService.getAdsbWeather().putImg(
                                     time, mBlock, null, conus, IntensityArray, 32, 4);
                             }
-                            iFISBLen = 0;
                         }
                     }
-                    iFISBLen= 0;
                     break;
             }
         } catch (JSONException e) {

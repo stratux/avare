@@ -221,13 +221,13 @@ public class Traffic {
              * Show a barb for heading with length based on speed
              * Vel can be 0 to 4096 knots (practically it can be 0 to 500 knots), so set from length 0 to 100 pixels (1/5)
              */
-            float speedLength = radius + (float)t.mHorizVelocity * (float)ctx.dip2pix / 5.f;
+//            float speedLength = radius + (float)t.mHorizVelocity * (float)ctx.dip2pix / 5.f;
             /*
              * Rotation of points to show direction
              */
-            double xr = x + PixelCoordinate.rotateX(speedLength, t.mHeading);
-            double yr = y + PixelCoordinate.rotateY(speedLength, t.mHeading);
-            ctx.canvas.drawLine(x, y, (float)xr, (float)yr, ctx.paint);
+//            double xr = x + PixelCoordinate.rotateX(speedLength, t.mHeading);
+//            double yr = y + PixelCoordinate.rotateY(speedLength, t.mHeading);
+//            ctx.canvas.drawLine(x, y, (float)xr, (float)yr, ctx.paint);
 
             /*
              * If in track-up mode, rotate canvas around screen x/y of
