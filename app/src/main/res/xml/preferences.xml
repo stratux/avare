@@ -558,13 +558,17 @@ authors: zkhan, jlmcgraw
 
 
     <PreferenceScreen
-        android:title="@string/Developer"
+        android:title="@string/Stratuvare"
         android:icon="@android:drawable/ic_menu_zoom" >
 
         <CheckBoxPreference
             android:key="@string/TileSize"
             android:summary="@string/TileSizeSummary"
             android:title="@string/TileSizeLabel" />
+        <CheckBoxPreference
+            android:key="@string/prefPersistZoom"
+            android:summary="@string/PersistZoomSummary"
+            android:title="@string/PersistZoomLabel" />
 
     </PreferenceScreen>
 
@@ -583,6 +587,4 @@ authors: zkhan, jlmcgraw
             android:summary="@string/StratuxIpEnableSummary"
             android:title="@string/StratuxIpEnableLabel" />
         -->
-    </PreferenceScreen>
-
     </PreferenceScreen>
