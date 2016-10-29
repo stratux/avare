@@ -66,7 +66,8 @@ Redistribution and use in source and binary forms, with or without modification,
         <activity android:name=".SyncActivity"/>
         <activity
             android:name="com.ds.avare.MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main"
+            android:launchMode="singleTop">
             <!-- Intent for mock gps built into app -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -77,7 +78,19 @@ Redistribution and use in source and binary forms, with or without modification,
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
         </activity>
-        
+
+        <provider
+            android:name=".provider.DatabaseSearchProvider"
+            android:authorities="com.ds.avare.search"
+            android:enabled="true"
+            android:exported="true" />
+
     </application>
 </manifest>

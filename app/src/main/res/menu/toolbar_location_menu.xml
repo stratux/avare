@@ -3,14 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        android:icon="@android:drawable/ic_menu_search"
         app:showAsAction="always"
-        app:actionViewClass="android.support.v7.widget.AppCompatSpinner"
+        android:title="Search" />
+    <item
         android:id="@+id/action_chart"
+        app:actionViewClass="android.support.v7.widget.AppCompatSpinner"
+        app:showAsAction="always"
         android:title="Chart Type" />
     <item
-        app:showAsAction="always"
-        app:actionViewClass="android.support.v7.widget.AppCompatSpinner"
         android:id="@+id/action_layer"
+        app:actionViewClass="android.support.v7.widget.AppCompatSpinner"
+        app:showAsAction="always"
         android:title="Layer Type" />
 
 </menu>

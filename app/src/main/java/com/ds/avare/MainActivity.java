@@ -11,6 +11,7 @@ Redistribution and use in source and binary forms, with or without modification,
 */
 package com.ds.avare;
 
+import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,6 +36,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ds.avare.fragment.AirportFragment;
 import com.ds.avare.fragment.LocationFragment;
@@ -142,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(R.string.app_name);
+        getSupportActionBar().setTitle("");
 
         // set the back arrow in the toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -377,6 +379,19 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Toast.makeText(this, "Searching by: "+ query, Toast.LENGTH_SHORT).show();
+        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            String uri = intent.getDataString();
+            Toast.makeText(this, "Suggestion: "+ uri, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void startPreferencesActivity() {

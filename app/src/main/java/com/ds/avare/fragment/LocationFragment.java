@@ -11,6 +11,9 @@ Redistribution and use in source and binary forms, with or without modification,
 */
 package com.ds.avare.fragment;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -24,7 +27,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatSpinner;
-import android.view.Gravity;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,8 +48,6 @@ import android.widget.ImageButton;
 import com.ds.avare.ChartsDownloadActivity;
 import com.ds.avare.MainActivity;
 import com.ds.avare.R;
-import com.ds.avare.animation.TwoButton;
-import com.ds.avare.animation.TwoButton.TwoClickListener;
 import com.ds.avare.flight.FlightStatusInterface;
 import com.ds.avare.gps.Gps;
 import com.ds.avare.gps.GpsParams;
@@ -1148,6 +1149,13 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
                     public void onNothingSelected(AdapterView<?> parent) { }
                 }
         );
+
+        SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
+
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
+        searchView.setIconified(true);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(getContext(), MainActivity.class)));
     }
 
     @Override
