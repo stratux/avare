@@ -33,7 +33,14 @@ import java.util.LinkedList;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.ds.avare.utils.StratuxNEXRADEntryType;
+import com.ds.avare.utils.StratuxRawType;
+import com.ds.avare.utils.StratuxSituationType;
+import com.ds.avare.utils.StratuxTrafficType;
+import com.ds.avare.utils.StratuxWeatherType;
 import com.google.gson.Gson;
+
+import static android.R.attr.type;
 import static java.lang.Thread.sleep;
 import com.google.gson.reflect.TypeToken;
 
@@ -174,137 +181,6 @@ public class IWebsocketService extends Service {
 
     };
 
-    public void HandleNEXRADFrame(int product_id, byte[] msg, int len) {
-        boolean elementIdentifier = (((int)msg[0]) & 0x80) != 0; // RLE or Empty?
-        int mBlock;
-        int mData[];
-        LinkedList<Integer> mEmpty;
-        int index = 3;
-        boolean conus;
-
-        if (product_id == 64)
-            conus = true;
-        else
-            conus = false;
-        mBlock = ((int)msg[0] & 0x0F) << 16;
-        mBlock += (((int)msg[1] & 0xFF) << 8);
-        mBlock += (int)msg[2] & 0xFF;
-        /*
-         * Decode blocks RLE encoded
-         */
-        if(elementIdentifier) {
-            mData = new int[32 * 4];
-            mEmpty = null;
-
-            /*
-             * Each row element is 1 minute (4 minutes total)
-             * Each col element is 1.5 minute (48 minutes total)
-             */
-            for (int i = 0; i < 32 * 4; i++) {
-                mData[i] = INTENSITY[0];
-            }
-
-            int j = 0;
-            int i;
-            while(index < len) {
-                int numberOfBins = ((msg[index] & 0xF8) >> 3) + 1;
-                for(i = 0; i < numberOfBins; i++) {
-                    if(j >= mData.length) {
-                        /*
-                         * Some sort of error.
-                         */
-                        mData = null;
-                        return;
-                    }
-                    mData[j] = INTENSITY[(msg[index] & 0x07)];
-                    j++;
-                }
-                index++;
-            }
-        }
-        else {
-            /*
-             * Make a list of empty blocks
-             */
-            mData = null;
-            mEmpty = new LinkedList<Integer>();
-            mEmpty.add(mBlock);
-            int bitmaplen = (int)msg[index] & 0x0F;
-
-            if(((int)msg[index] & 0x10) != 0) {
-                mEmpty.add(mBlock + 1);
-            }
-
-            if(((int)msg[index] & 0x20) != 0) {
-                mEmpty.add(mBlock + 2);
-            }
-
-            if(((int)msg[index] & 0x30) != 0) {
-                mEmpty.add(mBlock + 3);
-            }
-
-            if(((int)msg[index] & 0x40) != 0) {
-                mEmpty.add(mBlock + 4);
-            }
-
-            for(int i = 1; i < bitmaplen; i++) {
-                if(((int)msg[index + i] & 0x01) != 0) {
-                    mEmpty.add(mBlock + i * 8 - 3);
-                }
-
-                if(((int)msg[index + i] & 0x02) != 0) {
-                    mEmpty.add(mBlock + i * 8 - 2);
-                }
-
-                if(((int)msg[index + i] & 0x04) != 0) {
-                    mEmpty.add(mBlock + i * 8 - 1);
-                }
-
-                if(((int)msg[index + i] & 0x08) != 0) {
-                    mEmpty.add(mBlock + i * 8 - 0);
-                }
-
-                if(((int)msg[index + i] & 0x10) != 0) {
-                    mEmpty.add(mBlock + i * 8 + 1);
-                }
-
-                if(((int)msg[index + i] & 0x20) != 0) {
-                    mEmpty.add(mBlock + i * 8 + 2);
-                }
-
-                if(((int)msg[index + i] & 0x40) != 0) {
-                    mEmpty.add(mBlock + i * 8 + 3);
-                }
-
-                if(((int)msg[index + i] & 0x80) != 0) {
-                    mEmpty.add(mBlock + i * 8 + 4);
-                }
-            }
-        }
-                  /*
-                     * XXX: If we are getting this from station, it must be current, fix this.
-                     */
-        long time = Helper.getMillisGMT();//object.getLong("time");
-
-        int empty[];
-        if (mEmpty != null)
-        {
-            empty = new int[mEmpty.size()];
-            for(int i = 0; i < mEmpty.size(); i++) {
-                empty[i] = mEmpty.get(i);
-            }
-        }
-        else
-        {
-            empty = null;
-        }
-
-                    /*
-                     * Put in nexrad.
-                     */
-        mService.getAdsbWeather().putImg(
-                time, mBlock, empty, conus, mData, 32, 4);
-    }
 
     public void HandleRawDataMessage(JSONObject object)
     {
@@ -322,7 +198,8 @@ public class IWebsocketService extends Service {
                 case 64:
                     JSONArray jArray = object.getJSONArray("NEXRAD");
                     if (jArray != null) {
-                        for (int i = 0; i < jArray.length(); i++) {
+                            int lenval = jArray.length();
+                        for (int i = 0; i < lenval; i++) {
                             JSONObject jobj2 = jArray.getJSONObject(i);
                             final int mBlock = jobj2.getInt("Block");
                             final int rType=jobj2.getInt("Radar_Type");
@@ -397,20 +274,25 @@ public class IWebsocketService extends Service {
 
 
 
-    public void HandleWeatherMessage(String type, JSONObject object) {
+
+
+    public void HandleWeatherMessage(StratuxWeatherType wx) {
         double lon = 0;
         double lat = 0;
         double elev = 0;
         int tisid;
-
+        Long Ticks;
 
         try {
-            String AllData = object.getString("Time")+" "+object.getString("Data");
+            String AllData = wx.Time+" "+wx.Data;
 
-            lon = object.getDouble("TowerLon");
-            lat = object.getDouble("TowerLat");
-            tisid = object.getInt("TisId");
-            mService.getAdsbWeather().putUatTower(object.getLong("Ticks"), lon, lat, tisid);
+
+            lon = wx.TowerLon;
+            lat = wx.TowerLat;
+            tisid = wx.TisId;
+            Ticks = wx.Ticks;
+
+            mService.getAdsbWeather().putUatTower(Ticks, lon, lat, tisid);
 
 
 /*
@@ -419,17 +301,17 @@ public class IWebsocketService extends Service {
                 HandleNEXRADMessage(object);
             }
 */
-            if(type.equals("METAR") || type.equals("SPECI")) {
+            if(wx.Type.equals("METAR") || wx.Type.equals("SPECI")) {
                         /*
                          * Put METAR
                          */
 
-                String category = MetarFlightCategory.getFlightCategory(object.getString("Location"),AllData);
+                String category = MetarFlightCategory.getFlightCategory(wx.Location,AllData);
 
-                mService.getAdsbWeather().putMetar(object.getLong("Ticks"),
-                        object.getString("Location"), AllData, category); //object.getString("flight_category"));
+                mService.getAdsbWeather().putMetar(Ticks,
+                        wx.Location, AllData, category); //object.getString("flight_category"));
             }
-            if(type.equals("WINDS")) {
+            if(wx.Type.equals("WINDS")) {
 
 //                AllData = object.getString("Location") + " " + object.getString("Time")+" "+object.getString("Data");
                 String tokens[] = AllData.split("\n");
@@ -541,28 +423,29 @@ public class IWebsocketService extends Service {
                 if(!found) {
                     AllData += ",";
                 }
-                mService.getAdsbWeather().putWinds(object.getLong("Ticks"),
-                        object.getString("location"), AllData);
+                mService.getAdsbWeather().putWinds(Ticks,
+                        wx.Location, AllData);
 
             }
-            else if(type.equals("TAF") || type.equals("TAF.AMD")) {
-                mService.getAdsbWeather().putTaf(object.getLong("Ticks"),
-                        object.getString("Location"), AllData);
+            else if(wx.Type.equals("TAF") || wx.Type.equals("TAF.AMD")) {
+                mService.getAdsbWeather().putTaf(Ticks,
+                        wx.Location, AllData);
             }
-            else if(type.equals("PIREP")) {
-                mService.getAdsbWeather().putAirep(object.getLong("Ticks"),
-                        object.getString("Location"), AllData, mService.getDBResource());
+            else if(wx.Type.equals("PIREP")) {
+                mService.getAdsbWeather().putAirep(Ticks,
+                        wx.Location, AllData, mService.getDBResource());
             }
             else {
                 Logger.Logit("Unhandled type from stratux: "+type);
             }
 
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return;
         }
     }
-/*
+
+    /*
     object.put("type", "ownship");
     object.put("longitude", (double)om.mLon);
     object.put("latitude", (double)om.mLat);
@@ -572,15 +455,15 @@ public class IWebsocketService extends Service {
     object.put("altitude", (double) om.mAltitude);
 
  */
-    public void HandleSituationMessage(JSONObject object) {
+    public void HandleSituationMessage(StratuxSituationType situation) {
         try {
 
             long timeticks = Helper.getMillisGMT();
             Location l = new Location(LocationManager.GPS_PROVIDER);
-            l.setLongitude(object.getDouble("Lng"));
-            l.setLatitude(object.getDouble("Lat"));
-            l.setSpeed((float) object.getDouble("GroundSpeed"));
-            l.setBearing((float) object.getDouble("TrueCourse"));
+            l.setLongitude(situation.Lng);
+            l.setLatitude(situation.Lat);
+            l.setSpeed((float) situation.GroundSpeed);
+            l.setBearing((float) situation.TrueCourse);
 
             // TODO: We need to covert time from the message
             //l.setTime(object.getLong("time"));
@@ -589,7 +472,7 @@ public class IWebsocketService extends Service {
             // Choose most appropriate altitude. This is because people fly all sorts
             // of equipment with or without altitudes
             // convert all altitudes in feet
-            final double meterAltitude = (object.getDouble("Alt") * 0.3048);
+            final double meterAltitude = situation.Alt * 0.3048;
             final double pressureAltitude = meterAltitude * Preferences.heightConversion;
             double deviceAltitude = MIN_ALTITUDE;
             double geoAltitude = MIN_ALTITUDE;
@@ -644,7 +527,7 @@ public class IWebsocketService extends Service {
             l.setAltitude(alt / Preferences.heightConversion);
             mService.getGps().onLocationChanged(l, "ownship");
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return;
         }
     }
@@ -654,7 +537,7 @@ public class IWebsocketService extends Service {
         public void handleMessage(Message msg) {
 
             String text = (String)msg.obj;
-
+            Gson gson = new Gson();
             if(text == null || mService == null) {
                 return;
             }
@@ -664,29 +547,46 @@ public class IWebsocketService extends Service {
              */
             try {
                 JSONObject object = new JSONObject(text);
-                final Gson gson = new Gson();
                 String type = object.getString("Type");
 
                 if(type.equals("situation")) {
-                    HandleSituationMessage(object);
-                }
-
-                if(type.equals("Raw")) {
-                    HandleRawDataMessage(object);
+                    StratuxSituationType situation = gson.fromJson(text, StratuxSituationType.class);
+                    HandleSituationMessage(situation);
+                } else if(type.equals("Raw")) {
+//                    HandleRawDataMessage(object);
+                    Integer pid = object.getInt("Product_id");
+                    if ((pid == 63) || (pid == 64)) {
+                        StratuxRawType NEXRAD = gson.fromJson(text, StratuxRawType.class);
+                        if (NEXRAD.NEXRAD != null) {
+                            int i = 12;
+                        }
+                    }
                 }
                 else if(type.equals("traffic")) {
-                    mService.getTrafficCache().putTraffic(
-                            object.getString("Tail"),
-                            object.getInt("Icao_addr"),
-                            (float)object.getDouble("Lat"),
-                            (float)object.getDouble("Lng"),
-                            object.getInt("Alt"),
-                            (float)object.getDouble("Track"),
-                            (int)object.getInt("Speed"),
-                            Helper.getMillisGMT()
+
+                    try {
+                        StratuxTrafficType traffic = gson.fromJson(text, StratuxTrafficType.class);
+                        mService.getTrafficCache().putTraffic(
+                                traffic.Tail,
+                                traffic.Icao_addr,
+                                traffic.Lat, traffic.Lng,
+                                traffic.Alt, traffic.Track,
+                                traffic.Speed,
+                                Helper.getMillisGMT()
                             /*XXX:object.getLong("time")*/);
-                } else {
-                    HandleWeatherMessage(type, object);
+                    } catch(Exception e)
+                    {
+                        int i=3;
+                    }
+                } else  if (type.length() > 1) {
+                    try {
+
+                        StratuxWeatherType wx = gson.fromJson(text, StratuxWeatherType.class);
+                        HandleWeatherMessage(wx);
+                    } catch(Exception e) {
+                        int i=2;
+                    }
+//                    HandleWeatherMessage(type, object);
                 }
 
             } catch (JSONException e) {
