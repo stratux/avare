@@ -14,7 +14,8 @@ Redistribution and use in source and binary forms, with or without modification,
 authors: zkhan, jlmcgraw    
 -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceScreen
         android:title="@string/prefStorageAndDownloadsCategoryTitle" 
         android:icon="@android:drawable/ic_menu_save" >
@@ -214,9 +215,9 @@ authors: zkhan, jlmcgraw
             android:summary="@string/EarlyPassTimerSummary"
             android:title="@string/EarlyPassTimerLabel" />
     </PreferenceScreen>
-        
-    <PreferenceScreen 
-        android:title="@string/prefDisplayCategoryTitle" 
+
+    <PreferenceScreen
+        android:title="@string/prefDisplayCategoryTitle"
         android:icon="@android:drawable/ic_menu_gallery" >
         <CheckBoxPreference
             android:defaultValue="false"
@@ -276,7 +277,7 @@ authors: zkhan, jlmcgraw
             android:defaultValue="false"
             android:key="@string/AutoShowAirportDiagram"
             android:summary="@string/AutoShowAirportDiagramSummary"
-            android:title="@string/AutoShowAirportDiagramLabel" />        
+            android:title="@string/AutoShowAirportDiagramLabel" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="@string/ShowTrack"
@@ -321,7 +322,7 @@ authors: zkhan, jlmcgraw
             android:summary="@string/HideDrawButtonSummary"
             android:title="@string/HideDrawButtonLabel" />
         <PreferenceScreen
-	        android:title="@string/TabBarTitle" 
+	        android:title="@string/TabBarTitle"
             android:summary="@string/TabBarSummary"
 	        android:icon="@android:drawable/ic_menu_manage" >
 		        <CheckBoxPreference
@@ -371,8 +372,7 @@ authors: zkhan, jlmcgraw
 		            android:title="@string/Tools" />
 			</PreferenceScreen>
         </PreferenceScreen>
-
-	<PreferenceScreen 
+    <PreferenceScreen
     	    android:title="@string/prefTracksCategoryTitle" 
         	android:icon="@android:drawable/ic_menu_myplaces" >
         <CheckBoxPreference
@@ -563,20 +563,13 @@ authors: zkhan, jlmcgraw
 
 
     <PreferenceScreen
-        android:title="@string/Developer"
+        android:title="@string/Stratuvare"
         android:icon="@android:drawable/ic_menu_zoom" >
 
         <CheckBoxPreference
             android:key="@string/TileSize"
             android:summary="@string/TileSizeSummary"
             android:title="@string/TileSizeLabel" />
-
-    </PreferenceScreen>
-
-    <PreferenceScreen
-        android:title="@string/Stratuvare"
-        android:icon="@android:drawable/ic_menu_zoom" >
-
         <CheckBoxPreference
             android:key="@string/prefPersistZoom"
             android:summary="@string/PersistZoomSummary"
@@ -584,5 +577,20 @@ authors: zkhan, jlmcgraw
 
     </PreferenceScreen>
 
+    <PreferenceScreen
+        android:title="@string/prefConnectionCategoryTitle"
+        android:icon="@android:drawable/ic_menu_compass"
+        app:icon="@android:drawable/ic_menu_share">
 
+        <com.ds.avare.utils.EditTextPreferenceWithSummary
+            android:title="@string/StratuxIpLabel"
+            android:summary="@string/StratuxIpSummary"
+            android:key="@string/StratuxIp"/>
+        <!--
+        <CheckBoxPreference
+            android:key="@string/StratuxIpEnable"
+            android:summary="@string/StratuxIpEnableSummary"
+            android:title="@string/StratuxIpEnableLabel" />
+        -->
     </PreferenceScreen>
+</PreferenceScreen>

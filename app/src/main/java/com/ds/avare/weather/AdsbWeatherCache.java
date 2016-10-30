@@ -17,6 +17,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.RadialGradient;
 import android.graphics.Typeface;
 import android.util.SparseArray;
 
@@ -519,6 +520,8 @@ public class AdsbWeatherCache {
             }
             else
             {
+
+
                 ctx.paint.setColor(Color.BLACK);
                 ctx.paint.setAlpha(ctx.pref.showLayer());
                 ctx.canvas.drawCircle(x, y, ctx.dip2pix * 9, ctx.paint);
