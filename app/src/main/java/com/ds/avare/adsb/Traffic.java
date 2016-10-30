@@ -181,7 +181,7 @@ public class Traffic {
             }
 
 
-            float radius = ctx.dip2pix * 8;
+            float radius = ctx.dip2pix * 7;
             /*
              * Draw outline to show it clearly
              */
@@ -245,7 +245,7 @@ public class Traffic {
                     text, Color.BLACK, (float)x, (float)y + radius + ctx.textPaint.getTextSize());
 
             ctx.service.getShadowedText().draw(ctx.canvas, ctx.textPaint,
-                    text2, Color.BLACK, (float)x, (float)y + radius + (ctx.textPaint.getTextSize()*2));
+                    text2, Color.BLACK, (float)x, (float)y + radius + 4 + (ctx.textPaint.getTextSize()*2));
 
             if (true == bRotated) {
                 ctx.canvas.restore();

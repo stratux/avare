@@ -60,7 +60,7 @@ public class MetarFlightCategory {
         if((isCeiling && ceilingFt < 3000 && ceilingFt >= 1000) || (visibility >= 3 && visibility <= 5)) {
             return "MVFR";
         }
-        if((ceilingFt > 3000 || (!isCeiling)) && (visibility > 5)) {
+        if((ceilingFt >= 3000 || (!isCeiling)) && (visibility > 5)) {
             return "VFR";
         }
         return "Unknown";

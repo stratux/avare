@@ -114,7 +114,7 @@ public class IWebsocketService extends Service {
         client = new WebSocketClient(uri, new Draft_17()) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
-                client.send("Hello from websocket");
+//                client.send("Hello from websocket");
             }
 
             @Override
@@ -179,7 +179,6 @@ public class IWebsocketService extends Service {
         }
 
     };
-
 
     public void HandleRawDataMessage(JSONObject object)
     {

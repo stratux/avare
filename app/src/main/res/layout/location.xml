@@ -100,18 +100,5 @@ Redistribution and use in source and binary forms, with or without modification,
             android:layout_above="@+id/location_button_draw"
             android:layout_alignParentRight="true" />
 
-        <Button
-            android:id="@+id/location_button_stratux"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Stratux"
-            android:elevation="2dp"
-            android:layout_alignBaseline="@+id/plan_next"
-            android:layout_alignBottom="@+id/plan_next"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-
 </RelativeLayout>
 
