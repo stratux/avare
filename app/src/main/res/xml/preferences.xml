@@ -315,6 +315,11 @@ authors: zkhan, jlmcgraw
             android:key="@string/HideToolbar"
             android:summary="@string/HideToolbarSummary"
             android:title="@string/HideToolbarLabel" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/HideDrawButton"
+            android:summary="@string/HideDrawButtonSummary"
+            android:title="@string/HideDrawButtonLabel" />
         <PreferenceScreen
 	        android:title="@string/TabBarTitle" 
             android:summary="@string/TabBarSummary"
@@ -374,6 +379,10 @@ authors: zkhan, jlmcgraw
             android:key="@string/TrkUpdShowHistory"
             android:title="@string/TrkUpdShowHistoryLabel"
             android:summary="@string/TrkUpdShowHistorySummary"/>
+        <CheckBoxPreference
+            android:key="@string/prefAutoStartTracking"
+            android:title="@string/AutoStartTrackingLabel"
+            android:summary="@string/AutoStartTrackingSummary"/>
         <com.ds.avare.utils.ListPreferenceWithSummary
             android:defaultValue="@string/Zero"
             android:entries="@array/AutoPostTracksPrompts"
@@ -561,6 +570,17 @@ authors: zkhan, jlmcgraw
             android:key="@string/TileSize"
             android:summary="@string/TileSizeSummary"
             android:title="@string/TileSizeLabel" />
+
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        android:title="@string/Stratuvare"
+        android:icon="@android:drawable/ic_menu_zoom" >
+
+        <CheckBoxPreference
+            android:key="@string/prefPersistZoom"
+            android:summary="@string/PersistZoomSummary"
+            android:title="@string/PersistZoomLabel" />
 
     </PreferenceScreen>
 

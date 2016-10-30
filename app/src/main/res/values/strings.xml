@@ -11,6 +11,7 @@ Redistribution and use in source and binary forms, with or without modification,
 -->
 <resources>
 	<string name="lang"></string>
+    <string name="Stratuvare">&quot;Stratuvare&quot;</string>
     <string name="title_activity_main">&quot;Avare&quot;</string>
     <string name="MissingMaps">&quot;Download chart&quot;</string>
     <string name="MissingElevation">&quot;Download elevation chart&quot;</string>
@@ -73,6 +74,9 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="HideToolbar">&quot;Hide Toolbar&quot;</string>
     <string name="HideToolbarLabel">&quot;Hide Toolbar&quot;</string>
     <string name="HideToolbarSummary">&quot;Select to hide the top toolbar.&quot;</string>
+    <string name="HideDrawButton">&quot;Hide Draw Button&quot;</string>
+    <string name="HideDrawButtonLabel">&quot;Hide Draw Button&quot;</string>
+    <string name="HideDrawButtonSummary">&quot;Select to hide the draw button.&quot;</string>
     <string name="update">&quot;Update&quot;</string>
     <string name="GPS">&quot;GPS&quot;</string>
     <string name="longitude">&quot;'W&quot;</string>
@@ -226,6 +230,9 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="AutoPostTracksTitle">&quot;Send tracks file to &quot;</string>
     <string name="AutoPostTracksSubject">&quot;Avare flight tracking data - &quot;</string>
     <string name="prefAutoPostTracks">AutoPostTracks</string>
+    <string name="AutoStartTrackingLabel">&quot;Auto Start Tracking&quot;</string>
+    <string name="AutoStartTrackingSummary">&quot;Select to automatically turn tracking on when the application starts&quot;</string>
+    <string name="prefAutoStartTracking">AutoStartTracking</string>
     <string name="AutoPostTracksLabel">&quot;Automatic Track Post&quot;</string>
     <string name="AutoPostTracksSummary">&quot;Select what to do with the KML tracks file when closed&quot;</string>
     <string name="AutoPostTracksDialogText">&quot;The tracks file %s has been saved&quot;</string>
@@ -543,6 +550,10 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="TileSize">TileSize</string>
     <string name="TileSizeLabel">New Tile Size</string>
     <string name="TileSizeSummary">Use new map tile size for less run time resources - will need to re-download ALL charts</string>
+    <string name="PersistZoomLabel">&quot;Remember zoom?&quot;</string>
+    <string name="PersistZoomSummary">&quot;Select to return to last zoom level when the application starts&quot;</string>
+    <string name="prefPersistZoom">PersistZoom</string>
+    <string name="prefZoomLevel">ZoomLevel</string>
 
     <string name="Developer">Developer Settings</string>
     <string name="DeclareEmergency">Declare Emergency?</string>

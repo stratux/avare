@@ -1041,12 +1041,20 @@ public class Preferences {
         return mPref.getBoolean(mContext.getString(R.string.HideToolbar), false);
     }
 
+    public boolean getHideDrawButton() {
+        return mPref.getBoolean(mContext.getString(R.string.HideDrawButton), true);
+    }
+
     public void setHideTabBar(boolean val) {
         mPref.edit().putBoolean(mContext.getString(R.string.HideTabBar), val).apply();
     }
 
     public void setHideToolbar(boolean val) {
         mPref.edit().putBoolean(mContext.getString(R.string.HideToolbar), val).apply();
+    }
+
+    public void setHideDrawButton(boolean val) {
+        mPref.edit().putBoolean(mContext.getString(R.string.HideDrawButton), val).apply();
     }
 
     public boolean getPlanPassage() {
@@ -1228,6 +1236,23 @@ public class Preferences {
         mPref.edit().putInt("rateAskLastCount", set).commit();
     }
 
+    public boolean getAutoStartTracking() {
+        return mPref.getBoolean(mContext.getString(R.string.prefAutoStartTracking), false);
+    }
+
+    public boolean getPersistZoom() {
+        return mPref.getBoolean(mContext.getString(R.string.prefPersistZoom), false);
+    }
+
+    public float getZoomLevel() {
+        return mPref.getFloat(mContext.getString(R.string.prefZoomLevel),1.0f);
+    }
+
+    public void setZoomLevel(float zoom) {
+        SharedPreferences.Editor edit=mPref.edit();
+        edit.putFloat(mContext.getString(R.string.prefZoomLevel),zoom);
+        edit.commit();
+    }
 }
 
 
