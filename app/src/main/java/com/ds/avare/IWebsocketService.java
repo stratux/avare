@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.SystemClock;
+import android.util.Log;
 import android.widget.Button;
 
 import com.ds.avare.animation.TwoButton;
@@ -64,9 +66,8 @@ public class IWebsocketService extends Service {
     private JSONObject mGeoAltitude;
     private Preferences mPref;
     WebSocketClient client;
-    /* (non-Javadoc)
-     * @see android.app.Activity#onCreate(android.os.Bundle)
-     */
+
+
     private ServiceConnection mConnection = new ServiceConnection() {
 
         /* (non-Javadoc)
@@ -82,8 +83,6 @@ public class IWebsocketService extends Service {
             mService = binder.getService();
             mGeoAltitude = null;
             mPref = new Preferences(getApplicationContext());
-
-//            connectWebSocket();
         }
 
         /* (non-Javadoc)
@@ -208,22 +207,34 @@ public class IWebsocketService extends Service {
                             final double LonWest = jobj2.getDouble("LonWest");
                             final double Height = jobj2.getDouble("Height");
                             final double Width = jobj2.getDouble("Width");
-                            final JSONArray jIntensityArray = jobj2.getJSONArray("Intensity");
-                            int IntensityLen = jIntensityArray.length();
+                            final boolean isEmpty = jobj2.getBoolean("IsEmpty");
+                            final JSONArray jDataArray = jobj2.getJSONArray("Data");
+                            int IntensityLen = jDataArray.length();
                             int IntensityArray[] = new int[IntensityLen];
                             for (int j=0; j<IntensityLen; j++) {
-                                IntensityArray[j] = INTENSITY[jIntensityArray.getInt(j) & 7];
+                                if (isEmpty == false) {
+                                    IntensityArray[j] = INTENSITY[jDataArray.getInt(j) & 7];
+                                } else {
+                                    IntensityArray[j] = jDataArray.getInt(j);
+                                }
+                            }
                             long time = Helper.getMillisGMT();//object.getLong("time");
                             boolean conus = (rType == 64) ? true : false;
-                            mService.getAdsbWeather().putImg(
-                                    time, mBlock, null, conus, IntensityArray, 32, 4);
+
+                            if (isEmpty) {
+                                mService.getAdsbWeather().putImg(
+                                        time, mBlock, IntensityArray, conus, null, 32, 4);
+                            } else {
+                                mService.getAdsbWeather().putImg(
+                                        time, mBlock, null, conus, IntensityArray, 32, 4);
                             }
+
                         }
                     }
                     break;
             }
         } catch (JSONException e) {
-            return;
+            Log.e("IWebsocketService", e.getMessage());
         }
     }
 
@@ -268,7 +279,8 @@ public class IWebsocketService extends Service {
 
 
         } catch (JSONException e) {
-            return;
+            Log.e("IWebsocketService", e.getMessage());
+
         }
     }
 
@@ -441,7 +453,8 @@ public class IWebsocketService extends Service {
 
 
         } catch (Exception e) {
-            return;
+            Log.e("IWebsocketService", e.getMessage());
+
         }
     }
 
@@ -528,7 +541,8 @@ public class IWebsocketService extends Service {
             mService.getGps().onLocationChanged(l, "ownship");
 
         } catch (Exception e) {
-            return;
+            Log.e("IWebsocketService", e.getMessage());
+
         }
     }
 
@@ -553,14 +567,16 @@ public class IWebsocketService extends Service {
                     StratuxSituationType situation = gson.fromJson(text, StratuxSituationType.class);
                     HandleSituationMessage(situation);
                 } else if(type.equals("Raw")) {
-//                    HandleRawDataMessage(object);
+                    HandleRawDataMessage(object);
+/*
                     Integer pid = object.getInt("Product_id");
                     if ((pid == 63) || (pid == 64)) {
                         StratuxRawType NEXRAD = gson.fromJson(text, StratuxRawType.class);
                         if (NEXRAD.NEXRAD != null) {
-                            int i = 12;
+
                         }
                     }
+*/
                 }
                 else if(type.equals("traffic")) {
 
@@ -576,7 +592,7 @@ public class IWebsocketService extends Service {
                             /*XXX:object.getLong("time")*/);
                     } catch(Exception e)
                     {
-                        int i=3;
+                        Log.e("IWebsocketService", e.getMessage());
                     }
                 } else  if (type.length() > 1) {
                     try {
@@ -584,13 +600,13 @@ public class IWebsocketService extends Service {
                         StratuxWeatherType wx = gson.fromJson(text, StratuxWeatherType.class);
                         HandleWeatherMessage(wx);
                     } catch(Exception e) {
-                        int i=2;
+                        Log.e("IWebsocketService", e.getMessage());
                     }
 //                    HandleWeatherMessage(type, object);
                 }
 
             } catch (JSONException e) {
-                return;
+                Log.e("IWebsocketService", e.getMessage());
             }
         }
     };
