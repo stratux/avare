@@ -153,6 +153,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="IconHelicopter">&quot;Helicopter Icon&quot;</string>
     <string name="IconHelicopterLabel">&quot;Helicopter Icon&quot;</string>
     <string name="IconHelicopterSummary">&quot;Select to make the location icon a helicopter&quot;</string>
+    <string name="Stratux">&quot;Stratux&quot;</string>
     <string name="Draw">&quot;Draw&quot;</string>
     <string name="Pan">&quot;Pan&quot;</string>
     <string name="Clear">&quot;Clear&quot;</string>
@@ -581,5 +582,13 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="Rate">&quot;Rate Now&quot;</string>
     <string name="MaybeLater">&quot;Maybe Later&quot;</string>
     <string name="NeverAsk">&quot;Never Rate&quot;</string>
-
+    <string name="prefConnectionCategoryTitle">Connection Settings</string>
+    <string name="StratuxIp">StratuxIp</string>
+    <string name="StratuxIpLabel">Connect IP Address</string>
+    <string name="StratuxIpSummary">&quot;Enter the IP address of the stratux unit for the websocket connection&quot;</string>
+    <!--
+    <string name="StratuxIpEnable">StratuxIpEnable</string>
+    <string name="StratuxIpEnableLabel">Enable Stratux Connection</string>
+    <string name="StratuxIpEnableSummary">Enable or disable the websocket connection</string>
+    -->
 </resources>

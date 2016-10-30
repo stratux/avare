@@ -158,6 +158,9 @@ public class Preferences {
         if (val.equals("0")) {
             return "http://avare.stratux.me/old/";
         }
+        if (val.equals("1")) {
+            return "http://192.168.0.2:83/new/";
+        }
         return ("");
     }
 
@@ -1183,6 +1186,13 @@ public class Preferences {
     public String getAircraftTailNumber() {
         return mPref.getString(mContext.getString(R.string.AircraftTailNumber), "N1TEST");
     }
+    public String getStratuxIpAddress() {
+        return mPref.getString(mContext.getString(R.string.StratuxIp),"192.168.10.1");
+    }
+
+//    public boolean isStratuxIpEnabled() {
+//        return mPref.getBoolean(mContext.getString(R.string.StratuxIpEnable), true);
+//    }
 
     public String getPilotContact() {
         return mPref.getString(mContext.getString(R.string.PilotContact), "TEST PILOT 1-800-WX-BRIEF");

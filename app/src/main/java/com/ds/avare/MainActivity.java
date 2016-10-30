@@ -160,6 +160,9 @@ public class MainActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, StorageService.class);
         startService(intent);
 
+        Intent newintent = new Intent(this, IWebsocketService.class);
+        startService(newintent);
+
         mTabLayout.setVisibility(mPref.getHideTabBar() ? View.GONE : View.VISIBLE);
         mToolbar.setVisibility(mPref.getHideToolbar() ? View.GONE : View.VISIBLE);
 
