@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
@@ -50,7 +51,8 @@ import com.google.gson.reflect.TypeToken;
  * Created by jimdevel on 10/18/2016.
  */
 
-public class IWebsocketService extends Service {
+public class IWebsocketService extends Service
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final int MIN_ALTITUDE = -1000;
     public static final int INTENSITY[] = {
             0x00000000,
@@ -146,11 +148,14 @@ public class IWebsocketService extends Service {
         Intent intent = new Intent(this, StorageService.class);
         getApplicationContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         mPref = new Preferences(getApplicationContext());
+        // listen for IP changes
+        mPref.registerListener(this);
         connectWebSocket();
     }
 
     @Override
     public void onDestroy() {
+        mPref.unregisterListener(this);
         getApplicationContext().unbindService(mConnection);
         mService = null;
     }
@@ -609,5 +614,13 @@ public class IWebsocketService extends Service {
             }
         }
     };
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        // check for an IP change
+        if(key.equals(getString(R.string.StratuxIp))) {
+            client.close();
+        }
+    }
 
 }

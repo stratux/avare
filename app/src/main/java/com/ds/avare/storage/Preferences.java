@@ -20,6 +20,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Environment;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 
 import com.ds.avare.MainActivity;
@@ -1263,6 +1264,15 @@ public class Preferences {
         edit.putFloat(mContext.getString(R.string.prefZoomLevel),zoom);
         edit.commit();
     }
+
+    public void registerListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        mPref.registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    public void unregisterListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        mPref.unregisterOnSharedPreferenceChangeListener(listener);
+    }
+
 }
 
 
