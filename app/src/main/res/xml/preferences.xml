@@ -585,6 +585,7 @@ authors: zkhan, jlmcgraw
         <com.ds.avare.utils.EditTextPreferenceWithSummary
             android:title="@string/StratuxIpLabel"
             android:summary="@string/StratuxIpSummary"
+            android:defaultValue="192.168.10.1"
             android:key="@string/StratuxIp"/>
         <!--
         <CheckBoxPreference
