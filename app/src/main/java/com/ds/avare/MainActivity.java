@@ -377,6 +377,10 @@ public class MainActivity extends AppCompatActivity implements
                  */
                 Intent intent = new Intent(this, StorageService.class);
                 stopService(intent);
+
+                Intent newintent = new Intent(this, IWebsocketService.class);
+                stopService(newintent);
+
             }
         }
         super.onDestroy();
