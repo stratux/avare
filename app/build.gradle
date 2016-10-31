@@ -4,7 +4,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.ds.avare"
+        applicationId "com.stratuvare"
         minSdkVersion 16
         targetSdkVersion 23
     }
