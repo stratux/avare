@@ -1273,6 +1273,14 @@ public class Preferences {
         mPref.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
+    public boolean getAutoConnectWiFi() {
+        return mPref.getBoolean(mContext.getString(R.string.prefAutoConnectWiFi),false);
+    }
+
+    public String getWiFiSSID() {
+        return mPref.getString(mContext.getString(R.string.prefWiFiSSID), "stratux");
+    }
+
 }
 
 

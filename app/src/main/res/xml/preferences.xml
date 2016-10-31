@@ -587,6 +587,15 @@ authors: zkhan, jlmcgraw
             android:summary="@string/StratuxIpSummary"
             android:defaultValue="192.168.10.1"
             android:key="@string/StratuxIp"/>
+        <CheckBoxPreference
+            android:key="@string/prefAutoConnectWiFi"
+            android:summary="@string/AutoConnectWiFiSummary"
+            android:title="@string/AutoConnectWiFiLabel" />
+        <com.ds.avare.utils.EditTextPreferenceWithSummary
+            android:key="@string/prefWiFiSSID"
+            android:title="@string/WiFiSSIDLabel"
+            android:summary="@string/WiFiSSIDSummary"
+            android:defaultValue="stratux"/>
         <!--
         <CheckBoxPreference
             android:key="@string/StratuxIpEnable"
