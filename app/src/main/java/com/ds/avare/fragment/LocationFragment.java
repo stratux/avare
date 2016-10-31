@@ -24,7 +24,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatSpinner;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -61,7 +60,6 @@ import com.ds.avare.touch.GestureInterface;
 import com.ds.avare.touch.LongTouchDestination;
 import com.ds.avare.utils.DecoratedAlertDialogBuilder;
 import com.ds.avare.utils.GenericCallback;
-import com.ds.avare.utils.Helper;
 import com.ds.avare.utils.InfoLines.InfoLineFieldLoc;
 import com.ds.avare.views.LocationView;
 import com.ds.avare.webinfc.WebAppMapInterface;
@@ -157,42 +155,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
             }
         }
     };
-
-    /**
-     *
-     * @param dest
-     * @return
-     */
-    private boolean isSameDest(String dest) {
-        if(mService != null) {
-            Destination cdest = mService.getDestination();
-            if(cdest != null) {
-                if(dest.contains("&")) {
-                    /*
-                     * GPS dest needs comparison with closeness.
-                     */
-                    String tokens[] = dest.split("&");
-                    double lon;
-                    double lat;
-                    try {
-                        lon = Double.parseDouble(tokens[1]);
-                        lat = Double.parseDouble(tokens[0]);
-                    }
-                    catch(Exception e) {
-                        return false;
-                    }
-                    if(Helper.isSameGPSLocation(cdest.getLocation().getLongitude(),
-                            cdest.getLocation().getLatitude(), lon, lat)) {
-                        return true;
-                    }
-                }
-                else if(dest.equals(cdest.getID())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     /**
      *
@@ -399,7 +361,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
         });
 
         mChartsButton = (ImageButton) view.findViewById(R.id.location_button_charts);
-        mChartsButton.getBackground().setAlpha(255);
         mChartsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -408,7 +369,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
         });
 
         mLayersButton = (ImageButton) view.findViewById(R.id.location_button_layers);
-        mLayersButton.getBackground().setAlpha(255);
         mLayersButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -417,7 +377,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
         });
 
         mCenterButton = (ImageButton) view.findViewById(R.id.location_button_center);
-        mCenterButton.getBackground().setAlpha(255);
         mCenterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -445,7 +404,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
         });
 
         mDrawClearButton = (ImageButton) view.findViewById(R.id.location_button_draw_clear);
-        mDrawClearButton.getBackground().setAlpha(255);
         mDrawClearButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -461,7 +419,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
          * Draw
          */
         mDrawButton = (ImageButton) view.findViewById(R.id.location_button_draw);
-        mDrawButton.getBackground().setAlpha(255);
         mDrawButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -853,10 +810,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
                 mPref.isTrackUp() ? 0xFF00FF00 : 0xFF444444,
                 PorterDuff.Mode.MULTIPLY
         );
-        mLayersButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
-        mChartsButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
-        mDrawClearButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
-        mDrawButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
     }
 
     @Override
