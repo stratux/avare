@@ -13,14 +13,20 @@ Redistribution and use in source and binary forms, with or without modification,
 package com.ds.avare.views;
 
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.os.AsyncTask;
+import android.os.IBinder;
+import android.os.Message;
 import android.support.v4.view.GravityCompat;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -31,6 +37,8 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
 
+import com.ds.avare.IWebsocket;
+import com.ds.avare.IWebsocketService;
 import com.ds.avare.MainActivity;
 import com.ds.avare.R;
 import com.ds.avare.StorageService;
@@ -85,7 +93,7 @@ import java.util.Vector;
  * 
  * This is a view that user sees 99% of the time. Has moving map on it.
  */
-public class LocationView extends View implements OnTouchListener {
+public class LocationView extends View implements OnTouchListener, IWebsocketService.Listener {
     /**
      * paint for onDraw
      */
@@ -209,6 +217,18 @@ public class LocationView extends View implements OnTouchListener {
 
     private ScaleGestureDetector mScaleDetector;
 
+    // websocket
+    private IWebsocketService mWebSocket;
+    private ServiceConnection mWebConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            mWebSocket=((IWebsocketService.Binder)service).getService();
+            mWebSocket.addListener(LocationView.this);
+        }
+        public void onServiceDisconnected(ComponentName className) {
+            mWebSocket.removeListener(LocationView.this);
+            mWebSocket=null;
+        }
+    };
 
     /**
      * @param context
@@ -286,6 +306,10 @@ public class LocationView extends View implements OnTouchListener {
                 mViewParams.getScale().setScaleFactor(mViewParams.getScaleFactor());
             }
         }
+
+        mContext.bindService(new Intent(mContext,IWebsocketService.class),
+                                        mWebConnection,
+                                        Context.BIND_AUTO_CREATE);
     }
     
     /**
@@ -327,6 +351,17 @@ public class LocationView extends View implements OnTouchListener {
     public void onDraw(Canvas canvas) {
         drawMap(canvas);
     }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        // clean up the binder
+        if(mWebConnection!=null) {
+            mContext.unbindService(mWebConnection);
+            mWebConnection=null;
+        }
+    }
+
        
     /**
      * 
@@ -1042,6 +1077,21 @@ public class LocationView extends View implements OnTouchListener {
                         return null;
                     }
                 });
+    }
+
+    @Override
+    public void onWebsocketMessage(Message message) {
+        if("Update".equals(message.obj)) {
+        }
+        else if("Connected".equals(message.obj)) {
+            System.out.println(message.obj);
+        }
+        else if("Disconnected".equals(message.obj)) {
+            System.out.println(message.obj);
+        }
+        else {
+            System.out.println("Unknown message: "+message.obj);
+        }
     }
 
 
