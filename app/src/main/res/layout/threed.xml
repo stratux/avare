@@ -16,7 +16,7 @@ Redistribution and use in source and binary forms, with or without modification,
     android:layout_height="match_parent">
     
 
-    <com.ds.avare.views.ThreeDSurfaceView
+    <com.stratuvare.views.ThreeDSurfaceView
         android:id="@+id/threed_surface"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>
@@ -51,7 +51,7 @@ Redistribution and use in source and binary forms, with or without modification,
         android:layout_alignParentBottom="true"
         />
 
-    <com.ds.avare.views.GlassView
+    <com.stratuvare.views.GlassView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/threed_overlay_view"

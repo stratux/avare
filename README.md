@@ -3,7 +3,7 @@ avare
 
 Avare Aviation GPS for Android.
 
-Download from the Google Play Store: https://play.google.com/store/apps/details?id=com.ds.avare&hl=en
+Download from the Google Play Store: https://play.google.com/store/apps/details?id=com.stratuvare&hl=en
 
 Avare provides offline moving map on all FAA charts (VFR Sectional, IFR lo/hi enroute, Approach Plate, WAC & TAC); plus A/FD info, Airport Diagrams w/GPS Taxi, and Terminal Procedures. 
 

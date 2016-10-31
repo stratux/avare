@@ -18,25 +18,25 @@ authors: zkhan, jlmcgraw
     <PreferenceScreen
         android:title="@string/prefStorageAndDownloadsCategoryTitle" 
         android:icon="@android:drawable/ic_menu_save" >
-        <com.ds.avare.utils.GenericDialogPreference
+        <com.stratuvare.utils.GenericDialogPreference
             android:key="@string/Maps"
             android:summary="@string/MapsSummary"
             android:title="@string/MapsLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="@string/Zero"
             android:entries="@array/Server"
             android:entryValues="@array/ServerValues"
             android:key="@string/Root"
             android:summary="@string/RootSummary"
             android:title="@string/RootLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="@string/Zero"
             android:entries="@array/CyclePrompt"
             android:entryValues="@array/CycleValues"
             android:key="@string/Cycle"
             android:summary="@string/CycleSummary"
             android:title="@string/CycleLabel" />
-        <com.ds.avare.utils.GenericDialogPreference
+        <com.stratuvare.utils.GenericDialogPreference
             android:key="@string/UDWLocation"
             android:summary="@string/UDWSummary"
             android:title="@string/UDWLabel" />
@@ -60,7 +60,7 @@ authors: zkhan, jlmcgraw
             android:key="@string/GpsOffWarn"
             android:summary="@string/GpsOffWarnSummary"
             android:title="@string/GpsOffWarnLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="0"
             android:entries="@array/GpsPosition"
             android:entryValues="@array/GpsPositionValues"
@@ -72,14 +72,14 @@ authors: zkhan, jlmcgraw
     <PreferenceScreen 
         android:title="@string/prefWeatherCategoryTitle" 
         android:icon="@android:drawable/ic_menu_call" >
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="360"
             android:entries="@array/Expires"
             android:entryValues="@array/Expires"
             android:key="@string/Expires"
             android:summary="@string/ExpiresSummary"
             android:title="@string/ExpiresLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="255"
             android:entries="@array/Opacity"
             android:entryValues="@array/OpacityValues"
@@ -91,7 +91,7 @@ authors: zkhan, jlmcgraw
             android:key="@string/ADSBWeather"
             android:summary="@string/ADSBWeatherSummary"
             android:title="@string/ADSBWeatherLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="ALL"
             android:entries="@array/AirSig"
             android:entryValues="@array/AirSig"
@@ -118,11 +118,11 @@ authors: zkhan, jlmcgraw
     <PreferenceScreen 
         android:title="@string/prefAppStateCategoryTitle" 
         android:icon="@android:drawable/ic_menu_mapmode" >
-        <com.ds.avare.utils.GenericDialogPreference
+        <com.stratuvare.utils.GenericDialogPreference
             android:summary="@string/onlineSummary"
             android:title="@string/online"
             android:key="@string/RegisterActivityPreferenceKey" />
-        <com.ds.avare.utils.GenericDialogPreference
+        <com.stratuvare.utils.GenericDialogPreference
             android:summary="@string/syncSummary"
             android:title="@string/sync"
             android:key="@string/SyncActivityPreferenceKey" />
@@ -131,7 +131,7 @@ authors: zkhan, jlmcgraw
             android:key="@string/LeaveRunning"
             android:summary="@string/LeaveRunningSummary"
             android:title="@string/LeaveRunningLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="0"
             android:entries="@array/UnitsD"
             android:entryValues="@array/UnitsDValues"
@@ -163,28 +163,28 @@ authors: zkhan, jlmcgraw
             android:key="@string/EdgeTape"
             android:summary="@string/EdgeTapeSummary"
             android:title="@string/EdgeTapeLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="0"
             android:entries="@array/DistanceRingTypePrompts"
             android:entryValues="@array/DistanceRingTypeValues"
             android:key="@string/prefDistanceRingType"
             android:summary="@string/DistanceRingTypeSummary"
             android:title="@string/DistanceRingTypeLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="Default"
             android:entries="@array/DistanceRingColors"
             android:entryValues="@array/DistanceRingColors"
             android:key="@string/prefDistanceRingColors"
             android:summary="@string/DistanceRingColorsSummary"
             android:title="@string/DistanceRingColorsLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="0"
             android:entries="@array/TimerRingSizePrompt"
             android:entryValues="@array/TimerRingSizeValues"
             android:key="@string/prefTimerRingSize"
             android:summary="@string/TimerRingSizeSummary"
             android:title="@string/TimerRingSizeLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="30"
             android:entries="@array/FuelTimerValues"
             android:entryValues="@array/FuelTimerValues"
@@ -206,7 +206,7 @@ authors: zkhan, jlmcgraw
             android:key="@string/prefPlanPassage"
             android:summary="@string/prefPlanPassageSummary"
             android:title="@string/prefPlanPassageLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="30"
             android:entries="@array/EarlyPassTimerValues"
             android:entryValues="@array/EarlyPassTimerValues"
@@ -238,7 +238,7 @@ authors: zkhan, jlmcgraw
             android:key="@string/KeepScreenOn"
             android:summary="@string/KeepScreenOnSummary"
             android:title="@string/KeepScreenOnLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="Portrait"
             android:entries="@array/Orientation"
             android:entryValues="@array/Orientation"
@@ -255,7 +255,7 @@ authors: zkhan, jlmcgraw
             android:key="@string/TFRShading"
             android:summary="@string/TFRShadingSummary"
             android:title="@string/TFRShadingLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="100000"
             android:entries="@array/ADSBTrafficFilterAltitude"
             android:entryValues="@array/ADSBTrafficFilterAltitude"
@@ -287,14 +287,14 @@ authors: zkhan, jlmcgraw
             android:key="@string/AllFacilities"
             android:summary="@string/AllFacilitiesSummary"
             android:title="@string/AllFacilitiesLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="0"
             android:entries="@array/DisplayIconPrompt"
             android:entryValues="@array/DisplayIconValues"
             android:key="@string/DisplayIcon"
             android:summary="@string/DisplayIconSummary"
             android:title="@string/DisplayIconLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:entries="@array/RunwayLengths"
             android:entryValues="@array/RunwayLengths"
             android:key="@string/runwayLengths"
@@ -383,7 +383,7 @@ authors: zkhan, jlmcgraw
             android:key="@string/prefAutoStartTracking"
             android:title="@string/AutoStartTrackingLabel"
             android:summary="@string/AutoStartTrackingSummary"/>
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:defaultValue="@string/Zero"
             android:entries="@array/AutoPostTracksPrompts"
             android:entryValues="@array/AutoPostTracksValues"
@@ -401,79 +401,79 @@ authors: zkhan, jlmcgraw
         android:title="@string/userData"
         android:icon="@android:drawable/ic_menu_manage" >
 
-        <com.ds.avare.utils.EditTextPreferenceWithSummary
+        <com.stratuvare.utils.EditTextPreferenceWithSummary
             android:title="@string/PilotContact"
             android:summary="@string/PilotContactSummary"
             android:key="@string/PilotContact"/>
 
-        <com.ds.avare.utils.EditTextPreferenceWithSummary
+        <com.stratuvare.utils.EditTextPreferenceWithSummary
             android:title="@string/AircraftHomeBase"
             android:summary="@string/AircraftHomeBaseSummary"
             android:key="@string/AircraftHomeBase"/>
 
-        <com.ds.avare.utils.EditTextPreferenceWithSummary
+        <com.stratuvare.utils.EditTextPreferenceWithSummary
             android:title="@string/AircraftTailNumber"
             android:summary="@string/AircraftTailNumberSummary"
             android:key="@string/AircraftTailNumber"/>
 
-        <com.ds.avare.utils.EditTextPreferenceWithSummary
+        <com.stratuvare.utils.EditTextPreferenceWithSummary
             android:title="@string/AircraftType"
             android:summary="@string/AircraftTypeSummary"
             android:key="@string/AircraftType"/>
 
-        <com.ds.avare.utils.EditTextPreferenceWithSummary
+        <com.stratuvare.utils.EditTextPreferenceWithSummary
             android:title="@string/AircraftICAOCode"
             android:summary="@string/AircraftICAOCodeSummary"
             android:key="@string/AircraftICAOCode"/>
 
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:entries="@array/ACColor"
             android:entryValues="@array/ACColorValue"
             android:key="@string/AircraftColorPrimary"
             android:summary="@string/AircraftColorPrimarySummary"
             android:title="@string/AircraftColorPrimary" />
 
-        <com.ds.avare.utils.ListPreferenceWithSummary
+        <com.stratuvare.utils.ListPreferenceWithSummary
             android:entries="@array/ACColor"
             android:entryValues="@array/ACColorValue"
             android:key="@string/AircraftColorSecondary"
             android:summary="@string/AircraftColorSecondarySummary"
             android:title="@string/AircraftColorSecondary" />
 
-        <com.ds.avare.utils.EditTextPreferenceWithSummary
+        <com.stratuvare.utils.EditTextPreferenceWithSummary
             android:key="@string/AircraftEquipment"
             android:summary="@string/AircraftEquipmentSummary"
             android:title="@string/AircraftEquipment" />
 
-        <com.ds.avare.utils.EditTextPreferenceWithSummary
+        <com.stratuvare.utils.EditTextPreferenceWithSummary
             android:key="@string/AircraftSurveillance"
             android:summary="@string/AircraftSurveillanceSummary"
             android:title="@string/AircraftSurveillance" />
 
-        <com.ds.avare.utils.EditTextPreferenceWithSummary
+        <com.stratuvare.utils.EditTextPreferenceWithSummary
             android:title="@string/AircraftTAS"
             android:summary="@string/AircraftTASSummary"
             android:key="@string/AircraftTAS"/>
 
-        <com.ds.avare.utils.EditTextPreferenceWithSummary
+        <com.stratuvare.utils.EditTextPreferenceWithSummary
             android:title="@string/GlideRatioLabel"
             android:summary="@string/GlideRatioSummary"
             android:defaultValue="7.0"
             android:key="@string/GlideRatio"/>
 
-        <com.ds.avare.utils.EditTextPreferenceWithSummary
+        <com.stratuvare.utils.EditTextPreferenceWithSummary
             android:title="@string/FuelRateLabel"
             android:summary="@string/FuelRateSummary"
             android:defaultValue="10.0"
             android:key="@string/FuelRateLabel"/>
 
-        <com.ds.avare.utils.EditTextPreferenceWithSummary
+        <com.stratuvare.utils.EditTextPreferenceWithSummary
             android:title="@string/EmergencyContact"
             android:summary="@string/EmergencyContactSummary"
             android:defaultValue=""
             android:key="@string/EmergencyContact"/>
 
-        <com.ds.avare.utils.EditTextPreferenceWithSummary
+        <com.stratuvare.utils.EditTextPreferenceWithSummary
             android:title="@string/EmergencyChecklist"
             android:summary="@string/EmergencyChecklistSummary"
             android:defaultValue=""

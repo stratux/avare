@@ -72,7 +72,7 @@ Redistribution and use in source and binary forms, with or without modification,
             android:layout_height="wrap_content"
             android:padding="5dip" >
 
-            <com.ds.avare.views.MemView
+            <com.stratuvare.views.MemView
                 android:id="@+id/memory"
                 android:layout_width="160dip"
                 android:layout_height="10dip"/>
@@ -92,7 +92,7 @@ Redistribution and use in source and binary forms, with or without modification,
             android:layout_height="wrap_content"
             android:padding="5dip" >
 
-            <com.ds.avare.views.SatelliteView
+            <com.stratuvare.views.SatelliteView
                 android:id="@+id/satellite"
                 android:layout_width="160dip"
                 android:layout_height="160dip"/>

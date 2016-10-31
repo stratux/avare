@@ -23,7 +23,7 @@ Redistribution and use in source and binary forms, with or without modification,
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.ds.avare.views.AfdView
+            <com.stratuvare.views.AfdView
                 android:id="@+id/airport_afd"
                 android:background="#FF000000"
                 android:layout_width="wrap_content"

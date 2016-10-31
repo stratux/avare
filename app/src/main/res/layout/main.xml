@@ -33,7 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <!-- setting this will make the view slide up and down when the snackbar is shown -->
-                <!--app:layout_behavior="com.ds.avare.utils.FrameLayoutBehavior"-->
+                <!--app:layout_behavior="com.stratuvare.utils.FrameLayoutBehavior"-->
 
         </android.support.design.widget.CoordinatorLayout>
 

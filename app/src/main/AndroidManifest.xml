@@ -12,7 +12,7 @@ Redistribution and use in source and binary forms, with or without modification,
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ds.avare"
+    package="com.stratuvare"
     android:versionCode="283"
     android:versionName="7.5.3"
     android:installLocation="auto" >
@@ -52,10 +52,10 @@ Redistribution and use in source and binary forms, with or without modification,
 
         <service android:name=".StorageService"/>
         <service
-            android:name="com.ds.avare.IHelperService"
+            android:name="com.stratuvare.IHelperService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.ds.avare.START_SERVICE" />
+                <action android:name="com.stratuvare.START_SERVICE" />
             </intent-filter>
         </service>
         <activity android:name=".PrefActivity" />
@@ -65,7 +65,7 @@ Redistribution and use in source and binary forms, with or without modification,
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".SyncActivity"/>
         <activity
-            android:name="com.ds.avare.MainActivity"
+            android:name="com.stratuvare.MainActivity"
             android:label="@string/title_activity_main" >
             <!-- Intent for mock gps built into app -->
             <intent-filter>
