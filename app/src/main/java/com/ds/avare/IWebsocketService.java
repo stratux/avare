@@ -31,10 +31,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import com.ds.avare.utils.StratuxNEXRADEntryType;
 import com.ds.avare.utils.StratuxRawType;
@@ -67,7 +71,14 @@ public class IWebsocketService extends Service
     private StorageService mService;
     private JSONObject mGeoAltitude;
     private Preferences mPref;
-    WebSocketClient client;
+    private long lastConnect;
+    private WebSocketClient client;
+    private List<Listener> listeners = Collections.synchronizedList(new ArrayList<Listener>());
+
+    // Listener
+    public interface Listener {
+        public void onWebsocketMessage(Message message);
+    }
 
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -94,10 +105,12 @@ public class IWebsocketService extends Service
         public void onServiceDisconnected(ComponentName arg0) {
         }
     };
+
     private void connectWebSocket() {
         URI uri;
         String mConnectAddr;
 
+        lastConnect=System.currentTimeMillis();
         if (mPref != null) {
             mConnectAddr = mPref.getStratuxIpAddress();
         }
@@ -116,7 +129,7 @@ public class IWebsocketService extends Service
         client = new WebSocketClient(uri, new Draft_17()) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
-//                client.send("Hello from websocket");
+                sendMessage("Connected");
             }
 
             @Override
@@ -125,18 +138,41 @@ public class IWebsocketService extends Service
                 final String message = s;
                 msg.obj = s;
                 mHandlerWeb.sendMessage(msg);
+                sendMessage("Update");
             }
 
             @Override
             public void onClose(int i, String s, boolean b) {
-//                SystemClock.sleep(1000);
-                connectWebSocket();
+                sendMessage("Disconnected");
+
+                Runnable r=new Runnable() {
+                    @Override
+                    public void run() {
+                        connectWebSocket();
+                    }
+                };
+
+                // max 1 reconnect per second
+                long now=System.currentTimeMillis();
+                if(now-lastConnect>1000) {
+                    r.run();
+                }
+                else {
+                    mHandlerWeb.postDelayed(r, 1000 - (now - lastConnect));
+                }
             }
 
             @Override
             public void onError(Exception e) {
                 client.close();
             }
+
+            private void sendMessage(String msg) {
+                Message message=new Message();
+                message.obj=msg;
+                IWebsocketService.this.send(message);
+            }
+
         };
         client.connect();
     }
@@ -167,7 +203,7 @@ public class IWebsocketService extends Service
         return mWebsocket;
     }
 
-    private final IWebsocket.Stub mWebsocket = new IWebsocket.Stub() {
+    public class Binder extends IWebsocket.Stub {
         @Override
         public void sendDataText(String text) {
             Message msg = mHandlerWeb.obtainMessage();
@@ -176,14 +212,16 @@ public class IWebsocketService extends Service
         }
 
         @Override
-        /**
-         *
-         */
         public String recvDataText() {
             return null;
         }
 
-    };
+        public IWebsocketService getService() {
+            return IWebsocketService.this;
+        }
+    }
+
+    private final IWebsocket.Stub mWebsocket = new Binder();
 
     public void HandleRawDataMessage(JSONObject object)
     {
@@ -621,6 +659,26 @@ public class IWebsocketService extends Service
         if(key.equals(getString(R.string.StratuxIp))) {
             client.close();
         }
+    }
+
+    public boolean addListener(Listener listener) {
+        return listeners.add(listener);
+    }
+
+    public boolean removeListener(Listener listener) {
+        return listeners.remove(listener);
+    }
+
+    public void send(final Message message) {
+        (new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<Listener> list=new ArrayList<Listener>(listeners);
+                for(Listener listener:list) {
+                    listener.onWebsocketMessage(message);
+                }
+            }
+        })).start();
     }
 
 }
