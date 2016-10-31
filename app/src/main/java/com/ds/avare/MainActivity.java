@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         mPref.registerListener(this);
-        connectWiFi(mPref.getWiFiSSID());
+        connectWiFi();
 
     }
 
@@ -521,7 +521,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if(key.equals(getString(R.string.prefWiFiSSID))
          ||key.equals(getString(R.string.prefAutoConnectWiFi))) {
-            connectWiFi(mPref.getWiFiSSID());
+            connectWiFi();
         }
     }
 
@@ -529,8 +529,9 @@ public class MainActivity extends AppCompatActivity implements
      * Connect to WiFi network
      * @param SSID network to connect to
      */
-    private void connectWiFi(final String SSID) {
+    private void connectWiFi() {
         if(mPref.getAutoConnectWiFi()) {
+            final String SSID = mPref.getWiFiSSID();
             (new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -545,6 +546,7 @@ public class MainActivity extends AppCompatActivity implements
                             for (WifiConfiguration wifi : networks) {
                                 if (check.equals(wifi.SSID)) {
                                     ap = wifi.networkId;
+                                    break;
                                 }
                             }
                         }
