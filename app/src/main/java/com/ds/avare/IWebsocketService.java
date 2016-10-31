@@ -71,7 +71,8 @@ public class IWebsocketService extends Service
     private StorageService mService;
     private JSONObject mGeoAltitude;
     private Preferences mPref;
-    private long lastConnect;
+    private boolean mReconnect = true;
+    private long mLastConnect;
     private WebSocketClient client;
     private List<Listener> listeners = Collections.synchronizedList(new ArrayList<Listener>());
 
@@ -110,7 +111,7 @@ public class IWebsocketService extends Service
         URI uri;
         String mConnectAddr;
 
-        lastConnect=System.currentTimeMillis();
+        mLastConnect=System.currentTimeMillis();
         if (mPref != null) {
             mConnectAddr = mPref.getStratuxIpAddress();
         }
@@ -145,20 +146,21 @@ public class IWebsocketService extends Service
             public void onClose(int i, String s, boolean b) {
                 sendMessage("Disconnected");
 
-                Runnable r=new Runnable() {
-                    @Override
-                    public void run() {
-                        connectWebSocket();
-                    }
-                };
+                if(mReconnect) {
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+                            connectWebSocket();
+                        }
+                    };
 
-                // max 1 reconnect per second
-                long now=System.currentTimeMillis();
-                if(now-lastConnect>1000) {
-                    r.run();
-                }
-                else {
-                    mHandlerWeb.postDelayed(r, 1000 - (now - lastConnect));
+                    // max 1 reconnect per second
+                    long now = System.currentTimeMillis();
+                    if (now - mLastConnect > 1000) {
+                        r.run();
+                    } else {
+                        mHandlerWeb.postDelayed(r, 1000 - (now - mLastConnect));
+                    }
                 }
             }
 
@@ -193,6 +195,8 @@ public class IWebsocketService extends Service
     public void onDestroy() {
         mPref.unregisterListener(this);
         getApplicationContext().unbindService(mConnection);
+        mReconnect=false;
+        client.close();
         mService = null;
     }
     /**

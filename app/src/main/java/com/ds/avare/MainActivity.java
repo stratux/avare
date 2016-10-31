@@ -379,6 +379,9 @@ public class MainActivity extends AppCompatActivity implements
                 stopService(intent);
             }
         }
+        // stop the web socket
+        Intent intent = new Intent(this, IWebsocketService.class);
+        stopService(intent);
         super.onDestroy();
     }
 
