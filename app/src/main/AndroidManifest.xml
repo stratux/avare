@@ -39,7 +39,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <application
         android:icon="@drawable/aircraft"
         android:label="@string/app_name"
-        android:name="AvareApplication"
+        android:name="StratuvareApplication"
         android:theme="@style/AppTheme"
         android:allowBackup="true">
 

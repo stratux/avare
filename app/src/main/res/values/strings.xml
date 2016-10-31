@@ -12,7 +12,7 @@ Redistribution and use in source and binary forms, with or without modification,
 <resources>
 	<string name="lang"></string>
     <string name="Stratuvare">&quot;Stratuvare&quot;</string>
-    <string name="title_activity_main">&quot;Avare&quot;</string>
+    <string name="title_activity_main">&quot;Stratuvare&quot;</string>
     <string name="MissingMaps">&quot;Download chart&quot;</string>
     <string name="MissingElevation">&quot;Download elevation chart&quot;</string>
     <string name="LoadingMaps">&quot;Loading Charts&quot;</string>
@@ -228,7 +228,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="TrkUpdShowHistoryLabel">&quot;Track History&quot;</string>
     <string name="TrkUpdShowHistorySummary">&quot;Select to display the flight path track on the active chart&quot;</string>
     <string name="AutoPostTracksTitle">&quot;Send tracks file to &quot;</string>
-    <string name="AutoPostTracksSubject">&quot;Avare flight tracking data - &quot;</string>
+    <string name="AutoPostTracksSubject">&quot;Stratuvare flight tracking data - &quot;</string>
     <string name="prefAutoPostTracks">AutoPostTracks</string>
     <string name="AutoStartTrackingLabel">&quot;Auto Start Tracking&quot;</string>
     <string name="AutoStartTrackingSummary">&quot;Select to automatically turn tracking on when the application starts&quot;</string>
@@ -240,7 +240,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="CurrentlySetTo">&quot;\nCurrently: &quot;</string>
     <string name="ADSBWeather">ADSBWeather</string>
     <string name="ADSBWeatherLabel">&quot;Use ADSB Weather&quot;</string>
-    <string name="ADSBWeatherSummary">&quot;Select to use the weather from an ADSB receiver (requires the Avare External IO module app.), otherwise use the Internet weather&quot;</string>
+    <string name="ADSBWeatherSummary">&quot;Select to use the weather from an ADSB receiver (requires the Stratuvare External IO module app.), otherwise use the Internet weather&quot;</string>
     <string name="GeoRefPlates">&quot;Geo. Referenced Plates Database&quot;</string>
     <string name="ADSBTrafficFilter">ADSBTrafficFilter</string>
     <string name="ADSBTrafficFilterLabel">&quot;Filter ADSB Traffic&quot;</string>
@@ -282,7 +282,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="already_unregistered">You have already unregistered</string>
     <string name="registering_server">Registering with the Apps4Av servers</string>
     <string name="unregistering_server">Unregistering from the Apps4Av servers</string>
-    <string name="register_msg">Thank you for installing Avare.\nThe development team for the free Avare aviation app is dedicated to empowering pilots with helpful free, open source, ad-free, and safe tools.  To that end we have decided to require anonymous Registration of users in order to:\n\n1. Advise users immediately in the event we discover any errors in the app or in the FAA materials we process and provide to our users at no charge.\n\n2. Begin offering additional features useful to pilots, such as local airport info and attractions provided by pilots.\n\n3. Enable the potential for future features such as direct anonymous but verified communication between users or devices such as sharing Waypoints, Tracks, and Plans.\n\n4. Ensure that you assume all liability for your use of our free tools more conveniently, without the need to click an agreement at every launch of Avare.\n\nThe next screen provides more details on our Privacy Policy, and another opportunity to decline Registration.\nPlease press the Register button to continue.</string>
+    <string name="register_msg">Thank you for installing Stratuvare.\nThe development team for the free Avare aviation app is dedicated to empowering pilots with helpful free, open source, ad-free, and safe tools.  To that end we have decided to require anonymous Registration of users in order to:\n\n1. Advise users immediately in the event we discover any errors in the app or in the FAA materials we process and provide to our users at no charge.\n\n2. Begin offering additional features useful to pilots, such as local airport info and attractions provided by pilots.\n\n3. Enable the potential for future features such as direct anonymous but verified communication between users or devices such as sharing Waypoints, Tracks, and Plans.\n\n4. Ensure that you assume all liability for your use of our free tools more conveniently, without the need to click an agreement at every launch of Avare.\n\nThe next screen provides more details on our Privacy Policy, and another opportunity to decline Registration.\nPlease press the Register button to continue.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="failed_register">Failed to register!</string>
@@ -297,7 +297,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="AddAction">Add an action item</string>
     <string name="Add">Add</string>
     <string name="InvalidText">Invalid text entered</string>
-    <string name="SavedChecklist">Saved! If you remove Avare, you will lose your saved check lists</string>
+    <string name="SavedChecklist">Saved! If you remove Stratuvare, you will lose your saved check lists</string>
     <string name="DeleteListQuestion">Are you sure you want to delete the check list?</string>
     <string name="ImportAction">Import a check list from a plain text file</string>
     <string name="ImportActionFilePath">File path and name</string>
@@ -448,10 +448,10 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="prefTipSummary">&quot;Select to display tips when the application starts&quot;</string>
 
     <string name="sync">Sync Data</string>
-    <string name="syncSummary">Save/Load Avare data on Google Drive</string>
+    <string name="syncSummary">Save/Load Stratuvare data on Google Drive</string>
     <string name="Backup">Backup</string>
     <string name="Restore">Restore</string>
-    <string name="SyncMessage">Use this screen to backup and restore your Avare preferences, plans, and lists.</string>
+    <string name="SyncMessage">Use this screen to backup and restore your Stratuvare preferences, plans, and lists.</string>
     <string name="BackingUp">Backing up to Google Drive...</string>
     <string name="BackupFailed">Google Drive backup failed!</string>
     <string name="Wait">Wait...</string>
@@ -539,7 +539,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="ShapeFileLabel">Shape File Name</string>
     <string name="ShapeFileSummary">Load Esri shape file of specified name from the download folder (change requires app restart)</string>
     <string name="CrashText">To help improve the app, please submit this report to us via email.</string>
-    <string name="CrashLabel">Avare has stopped unexpectedly!</string>
+    <string name="CrashLabel">Stratuvare has stopped unexpectedly!</string>
     <string name="VerifyPlates">&quot;Verify plates at http://avare.openaircraft.com&quot;</string>
     <string name="FirstPerson">Pilot Cam</string>
     <string name="FirstPersonLabel">Pilot Cam</string>
@@ -558,7 +558,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="Developer">Developer Settings</string>
     <string name="DeclareEmergency">Declare Emergency?</string>
     <string name="DeclareEmergencyDetails">1.Set Destination to Nearest Airport\n2.Load Emergency Checklist\n3.Show distance guidance\n4.Send SMS to Emergency Contact</string>
-    <string name="SMSFailed">SMS Send Failed! This device cannot send SMS, or Avare is not allowed to send one.</string>
+    <string name="SMSFailed">SMS Send Failed! This device cannot send SMS, or Stratuvare is not allowed to send one.</string>
     <string name="Menu">Menu</string>
 
     <string name="RegisterActivityPreferenceKey">REGISTER_ACTIVITY_PREFERENCE_KEY</string>
@@ -576,8 +576,8 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="ShowWindBarbs">&quot;Show Wind Barbs on METARs&quot;</string>
     <string name="ShowWindBarbsSummary">&quot;Choose to select the display of wind barbs on ADS-B METARs&quot;</string>
 
-    <string name="RatingTitle">&quot;Please Rate Avare&quot;</string>
-    <string name="RatingMessage">&quot;If you like Avare, please rate it on play store. Thank you!&quot;</string>
+    <string name="RatingTitle">&quot;Please Rate Stratuvare&quot;</string>
+    <string name="RatingMessage">&quot;If you like Stratuvare, please rate it on play store. Thank you!&quot;</string>
     <string name="Rate">&quot;Rate Now&quot;</string>
     <string name="MaybeLater">&quot;Maybe Later&quot;</string>
     <string name="NeverAsk">&quot;Never Rate&quot;</string>

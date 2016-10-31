@@ -31,7 +31,7 @@ import org.acra.annotation.ReportsCrashes;
         resDialogIcon = android.R.drawable.stat_notify_error,
         resDialogTitle = R.string.CrashLabel,
         resDialogText = R.string.CrashText)
-public class AvareApplication extends Application {
+public class StratuvareApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
