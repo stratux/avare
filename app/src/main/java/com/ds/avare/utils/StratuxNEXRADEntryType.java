@@ -6,8 +6,8 @@ import java.util.ArrayList;
  */
 
 public class StratuxNEXRADEntryType {
-    public Integer Radar_Type;
-    public Integer Scale;
+    public int Radar_Type;
+    public int Scale;
     public Double LatNorth;
     public Double LonWest;
     public Double Height;

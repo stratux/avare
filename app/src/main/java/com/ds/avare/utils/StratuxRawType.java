@@ -3,13 +3,13 @@ import java.util.ArrayList;
 
 public class StratuxRawType {
     public String Type;
-    public Integer FISB_month;
-    public Integer FISB_day;
-    public Integer FISB_hours;
-    public Integer FISB_minutes;
-    public Integer FISB_seconds;
-    public Integer FISB_length;
-    public Integer Frame_type;
-    public Integer Product_id;
+    public int FISB_month;
+    public int FISB_day;
+    public int FISB_hours;
+    public int FISB_minutes;
+    public int FISB_seconds;
+    public int FISB_length;
+    public int Frame_type;
+    public int Product_id;
     public ArrayList<StratuxNEXRADEntryType> NEXRAD;
 }

@@ -13,8 +13,8 @@ public class StratuxWeatherType {
     public String Time;
     public String Data;
     public String LocaltimeReceived;
-    public Long Ticks;
-    public Double TowerLon;
-    public Double TowerLat;
-    public Integer TisId;
+    public long Ticks;
+    public double TowerLon;
+    public double TowerLat;
+    public int TisId;
 }

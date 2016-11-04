@@ -6,12 +6,12 @@ package com.ds.avare.utils;
 
 public class StratuxSituationType {
     public String Type;
-    public Double LastFixSinceMidnightUTC;
-    public Double Lat;
-    public Double Lng;
-    public Integer Quality;
-    public Double Alt;
-    public Float TrueCourse;
-    public Double GPSVertVel;
-    public Float GroundSpeed;
+    public double LastFixSinceMidnightUTC;
+    public double Lat;
+    public double Lng;
+    public int Quality;
+    public double Alt;
+    public float TrueCourse;
+    public double GPSVertVel;
+    public float GroundSpeed;
 }

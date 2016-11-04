@@ -517,11 +517,12 @@ public class IWebsocketService extends Service
     public void HandleSituationMessage(StratuxSituationType situation) {
         try {
 
-            long timeticks = Helper.getMillisGMT();
+            final long timeticks = Helper.getMillisGMT();
+            final double gSpd = situation.GroundSpeed * 0.539957;
             Location l = new Location(LocationManager.GPS_PROVIDER);
             l.setLongitude(situation.Lng);
             l.setLatitude(situation.Lat);
-            l.setSpeed((float) situation.GroundSpeed);
+            l.setSpeed((float) gSpd);
             l.setBearing((float) situation.TrueCourse);
 
             // TODO: We need to covert time from the message
@@ -570,7 +571,6 @@ public class IWebsocketService extends Service
             if(alt <= MIN_ALTITUDE) {
                 alt = MIN_ALTITUDE;
             }
-
             // set pressure altitude for traffic alerts
             mService.getTrafficCache().setOwnAltitude((int) alt);
 
