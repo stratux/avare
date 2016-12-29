@@ -1999,6 +1999,7 @@ public class DataBaseHelper  {
 
         Metar metar = null;
         final int searchRadius = mPref.getClosestMetarSearchRadius();
+        if( searchRadius == 0 ) return null;
         SquareBoxSearchHelper squareBoxSearchHelper = new SquareBoxSearchHelper(lat, lon, searchRadius);
 
         String qry =
