@@ -584,7 +584,45 @@ public class LocationView extends View implements OnTouchListener, IWebsocketSer
             return;
         }
 
-        if(ctx.pref.useAdsbWeather()) {
+        if(mLayerType.equals("Plate")) {
+            BitmapHolder b = mService.getDiagram();
+
+            if(b == null || b.getBitmap() == null) {
+                return;
+            }
+
+            // find georef info
+            float[] matrix = mService.getMatrix();
+            if(null == matrix) {
+                return;
+            }
+
+            //draw
+            float dx = matrix[0];
+            float dy = matrix[1];
+            float lonTopLeft = matrix[2];
+            float latTopLeft = matrix[3];
+            float lonBottomRight = lonTopLeft + b.getBitmap().getWidth() / dx;
+            float latBottomRight = latTopLeft + b.getBitmap().getHeight() / dy;
+
+
+            float x0 = (float)mOrigin.getOffsetX(lonTopLeft);
+            float y0 = (float)mOrigin.getOffsetY(latTopLeft);
+            float x1 = (float)mOrigin.getOffsetX(lonBottomRight);
+            float y1 = (float)mOrigin.getOffsetY(latBottomRight);
+
+            float scalex = (x1 - x0) / b.getBitmap().getWidth();
+            float scaley = (y1 - y0) / b.getBitmap().getHeight();
+
+            b.getTransform().setScale(scalex, scaley);
+            b.getTransform().postTranslate(x0, y0);
+
+            mPaint.setAlpha(mPref.showLayer());
+            canvas.drawBitmap(b.getBitmap(), b.getTransform(), mPaint);
+            mPaint.setAlpha(mPref.showLayer());
+
+        }
+        else if(ctx.pref.useAdsbWeather()) {
             if (mLayerType.equals("NEXRAD")) {
                 NexradBitmap.draw(ctx, mService.getAdsbWeather().getNexrad(),
                         mService.getAdsbWeather().getNexradConus(), null == mPointProjection);
@@ -1247,7 +1285,13 @@ public class LocationView extends View implements OnTouchListener, IWebsocketSer
                 if(isCancelled()) {
                     return "";
                 }
-            
+                if (metar==null) { // in no metar on the field, try to find the closest metar
+                    metar = mService.getDBResource().getClosestMETAR(lat,lon);
+                    if(isCancelled()) {
+                        return "";
+                    }
+                }
+
                 runways = mService.getDBResource().findRunways(airport);
                 if(isCancelled()) {
                     return "";
@@ -1352,12 +1396,13 @@ public class LocationView extends View implements OnTouchListener, IWebsocketSer
                 //ideally we would pass altitude AGL for navaid reception calculations
                 mLongTouchDestination.navaids = new NavAidHelper(mContext, lon, lat, mGpsParams.getAltitude()).toHtmlString(navaids);
                 if(metar != null) {
+                    String bestRunway = WeatherHelper.getBestRunway(metar.rawText, runways);
                     mLongTouchDestination.performance =
                             WeatherHelper.getMetarTime(metar.rawText) + "\n" +
                             mContext.getString(R.string.DensityAltitude) + " " +
                             WeatherHelper.getDensityAltitude(metar.rawText, elev) + "\n" +
-                            mContext.getString(R.string.BestRunway) + " " +
-                            WeatherHelper.getBestRunway(metar.rawText, runways);
+                                    (!bestRunway.isEmpty() ?
+                                    (mContext.getString(R.string.BestRunway) + " " + bestRunway) : "");
                 }
                 
                 // If the long press event has already occurred, we need to do the gesture callback here

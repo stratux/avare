@@ -14,11 +14,9 @@ package com.ds.avare.utils;
 
 import android.content.Context;
 
-import com.ds.avare.R;
 import com.ds.avare.place.NavAid;
 import com.ds.avare.position.Coordinate;
 import com.ds.avare.position.Projection;
-import com.ds.avare.storage.Preferences;
 
 import java.util.Locale;
 import java.util.Vector;
@@ -76,26 +74,39 @@ public class NavAidHelper {
         double distanceToNavAid = p.getDistance();
         boolean isReceived = isVorReceived(distanceToNavAid, navaidClass, altitudeReference - navaidElevation)
                 || !("TLH".contains(navaidClass) || navaidClass.isEmpty());
-        long radial = Math.round(Helper.getMagneticHeading(p.getBearing(), navaidVariation));
-        return " on " + String.format(Locale.getDefault(), "%03d", radial) + ctx.getString(R.string.degree) + " radial "
-                + (!isReceived ? "<font color='yellow'>" : "")
-                + Math.round(distanceToNavAid) + Preferences.distanceConversionUnit
-                + (!isReceived ? "</font>" : "")
-            ;
+        long radial = Math.round(Helper.getMagneticHeading(p.getBearing(), -navaidVariation));
+
+        final String LIGHT_RED = "#ff6666", LIGHT_GREEN = "#99ff66";
+        return  String.format(Locale.getDefault(), "%03d", radial)
+                + "<font color='" + (isReceived ? LIGHT_GREEN : LIGHT_RED) + "'>"
+                + String.format(Locale.getDefault(), "%03d", Math.round(distanceToNavAid))
+                + "</font>";
     }
 
     /** format vector of navaids as a string */
     public String toHtmlString(Vector<NavAid> navaids) {
-        String result = "";
+        String result = "<table>";
         if (navaids != null) {
             for (NavAid na : navaids) {
-                result += (result != "" ? "<br>" : "") // fields' order same as Chart Supplement convention
-                        + na.getLongName() + " " + na.getType()
-                        + (na.hasHiwas() ? "<sup>(H)</sup>" : "")
-                        + " " + na.getFrequency() + " " + na.getLocationId()
-                        + " " + getNavaidLocationAsHtml(na.getCoords(), na.getVariation(), na.getNavaidClass(), na.getElevation());
+
+                result +=
+                        "<tr>" // fields' order same as Chart Supplement convention
+                            + "<td>"
+                                + na.getLocationId()
+                                + getNavaidLocationAsHtml(na.getCoords(), na.getVariation(), na.getNavaidClass(), na.getElevation())
+                            + "</td>"
+                            + "<td>&nbsp;"
+                                + na.getFrequency()
+                            + "</td>"
+                            + "<td>&nbsp;"
+                                + (na.hasHiwas() ? "(H)" : "")
+                            + "</td>"
+                            + "<td>&nbsp;"
+                                + MorseCodeGenerator.getInstance().getCodeHtml(na.getLocationId())
+                            + "</td>"
+                        + "</tr>";
             }
         }
-        return result;
+        return result + "</table>";
     }
 }

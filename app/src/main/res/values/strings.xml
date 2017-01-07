@@ -255,7 +255,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="DownloadDBShort">&quot;Download Databases&quot;</string>
     <string name="Layer">LayerTransparency</string>
     <string name="LayerSelect">&quot;Select Layer Type&quot;</string>
-    <string name="LayerSummary">&quot;Select how transparent a NEXRAD/METAR layer should be&quot;</string>
+    <string name="LayerSummary">&quot;Select how transparent a Map layer should be&quot;</string>
     <string name="PlanWarning">&quot;Clear the current plan &quot;</string>
     <string name="AndLoad">&quot;and load&quot;</string>
     <string name="PlanDestinationNF">&quot;Some way points not found.&quot;</string>
@@ -377,6 +377,8 @@ Redistribution and use in source and binary forms, with or without modification,
 	<string name="NearSummary">&quot;Nearest airport information and navigation data.&quot;</string>
 	<string name="ChecklistSummary">&quot;User defined checklists and management.&quot;</string>
     <string name="GPSSummary">&quot;Current settings, GPS status/satellite display.&quot;</string>
+    <string name="TripSummary">&quot;Travel display.&quot;</string>
+    <string name="PfdSummary">&quot;PFD display.&quot;</string>
 
 	<string name="prefTabPlates">&quot;prefTabPlates&quot;</string>
     <string name="prefTabAFD">&quot;prefTabAFD&quot;</string>
@@ -387,6 +389,8 @@ Redistribution and use in source and binary forms, with or without modification,
 	<string name="prefTabNear">&quot;prefTabNear&quot;</string>
 	<string name="prefTabChecklist">&quot;prefTabChecklist&quot;</string>
     <string name="prefTabTools">&quot;prefTabTools&quot;</string>
+    <string name="prefTabTrip">&quot;prefTabTrip&quot;</string>
+    <string name="prefTabPfd">&quot;prefTabPfd&quot;</string>
 
 	<string name="externalGps">GPSExternalOrInternal</string>
     <string name="externalGpsLabel">GPS Position Source</string>
@@ -598,4 +602,18 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="Label"></string>
     <string name="Summary"></string>
     -->
+    <string name="PFD">PFD</string>
+    <string name="NoSensor">Sensors required for PFD are not available on this device.</string>
+    <string name="OnlyPortrait">Only portrait mode is supported.</string>
+    <string name="VerticalPfd">VerticalPfd</string>
+    <string name="VerticalPfdLabel">PFD Vertical Mount</string>
+    <string name="VerticalPfdSummary">&quot;Select to use PFD mounted vertically, otherwise horizontally&quot;</string>
+    <string name="SeeHelp">See Help.</string>
+
+    <string name="NearestMETARRadius">&quot;NearestMETARRadius&quot;</string>
+    <string name="NearestMETARRadiusLabel">&quot;Nearest METAR Search Radius&quot;</string>
+    <string name="NearestMETARRadiusSummary">&quot;Select the distance to the nearest METAR station reported when METAR is unavailable on a field.&quot;</string>
+    <string name="WindsAloftCeiling">&quot;Winds/Temp. Aloft Filter&quot;</string>
+    <string name="WindsAloftCeilingSummary">&quot;Select Winds/Temperature Aloft upper limit altitude (thousands of feet)&quot;</string>
+
 </resources>

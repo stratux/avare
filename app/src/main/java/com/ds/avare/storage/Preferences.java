@@ -922,6 +922,10 @@ public class Preferences {
             mTabs |= 1 << MainActivity.TAB_TOOLS;
         }
 
+        if (mPref.getBoolean(mContext.getString(R.string.prefTabPfd), true)) {
+            mTabs |= 1 << MainActivity.TAB_PFD;
+        }
+
         return mTabs;
     }
 
@@ -1260,8 +1264,8 @@ public class Preferences {
     }
 
     public void setZoomLevel(float zoom) {
-        SharedPreferences.Editor edit=mPref.edit();
-        edit.putFloat(mContext.getString(R.string.prefZoomLevel),zoom);
+        SharedPreferences.Editor edit = mPref.edit();
+        edit.putFloat(mContext.getString(R.string.prefZoomLevel), zoom);
         edit.commit();
     }
 
@@ -1281,6 +1285,29 @@ public class Preferences {
         return mPref.getString(mContext.getString(R.string.prefWiFiSSID), "stratux");
     }
 
+    public boolean isVerticalPfd() {
+        return mPref.getBoolean(mContext.getString(R.string.VerticalPfd), false);
+    }
+
+    public int getClosestMetarSearchRadius() {
+        try {
+            return (Integer.parseInt(mPref.getString(mContext.getString(R.string.NearestMETARRadius), "0")));
+        } catch (Exception x) {
+            return 0;
+        }
+    }
+
+    public void setClosestMetarSearchRadius(int set) {
+        mPref.edit().putString(mContext.getString(R.string.NearestMETARRadius), Integer.toString(set)).commit();
+    }
+
+    public int getWindsAloftCeiling() {
+        try {
+           return Integer.parseInt(mPref.getString(mContext.getString(R.string.WindsAloftCeiling), "39"));
+        } catch (Exception x) {
+            return 39;
+        }
+    }
 }
 
 

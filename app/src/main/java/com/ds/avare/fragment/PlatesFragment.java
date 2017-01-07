@@ -90,7 +90,8 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
     private TimerObserver mTimerObserver;
     private com.ds.avare.touch.Constants.TouchMode mTouchMode = com.ds.avare.touch.Constants.TouchMode.PAN_MODE;
 
-    public static final String AD = "AIRPORT-DIAGRAM";
+    public static final String AD = Destination.AD;
+    public static final String AREA = "AREA";
 
     /*
      * For GPS taxi
@@ -332,7 +333,7 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
         mAirportButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mListAirports.size() == 0 || arePopupsShowing()) {
+                if (mListAirports == null || mListAirports.size() == 0 || arePopupsShowing()) {
                     return;
                 }
 
@@ -420,11 +421,18 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
             String name = mListPlates.get(pos);
 
             mPlatesView.setParams(null, true);
-            if(name.startsWith(Destination.AD)) {
-                mPlatesView.setParams(getMatrix(name), true);
+            float m[] = getMatrix(name);
+            mService.setMatrix(null); // to small to show on map
+            if(name.startsWith(AD)) {
+                mPlatesView.setParams(m, true);
+            }
+            else if(name.startsWith(AREA)) {
+                mPlatesView.setParams(m, false);
             }
             else {
-                mPlatesView.setParams(getMatrix(name), false);
+                mPlatesView.setParams(m, false);
+                mService.setMatrix(m); // save for other activities that want to show plate
+                // TODO: above might not be necessary now that we're using fragments
             }
             mPlatesButton.setText(name);
             mService.setLastPlateIndex(pos);
@@ -530,7 +538,6 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
                      */
 
                     String dplates[] = new File(mapFolder + "/plates/" + airport).list(filter);
-                    String aplates[] = new File(mapFolder + "/area/" + airport).list(filter);
                     String mins[] = mService.getDBResource().findMinimums(airport);
 
                     TreeMap<String, String> plates = new TreeMap<String, String>(new PlatesComparable());
@@ -538,12 +545,6 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
                         for(String plate : dplates) {
                             String tokens[] = plate.split(Preferences.IMAGE_EXTENSION);
                             plates.put(tokens[0], mapFolder + "/plates/" + airport + "/" + tokens[0]);
-                        }
-                    }
-                    if (aplates != null) {
-                        for(String plate : aplates) {
-                            String tokens[] = plate.split(Preferences.IMAGE_EXTENSION);
-                            plates.put(tokens[0], mapFolder + "/area/" + airport + "/" + tokens[0]);
                         }
                     }
                     if(mins != null) {
@@ -564,7 +565,8 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
                  * GPS taxi for this airport?
                  */
                 mMatrix = mService.getDBResource().findDiagramMatrix(airport);
-
+                mService.setMatrix(null);
+                
                 String oldAirport = mAirportButton.getText().toString();
                 mAirportButton.setText(airport);
 
@@ -680,7 +682,7 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
             /*
              * Airport diagram must be first
              */
-            String[] type = {AD, "AREA", "ILS-", "HI-ILS-", "LOC-", "HI-LOC-", "LDA-", "SDA-", "GPS-", "RNAV-GPS-", "RNAV-RNP-", "VOR-", "HI-VOR-", "TACAN-", "HI-TACAN-", "NDB-", "COPTER-", "CUSTOM-", "LAHSO", "HOT-SPOT", "Min."};
+            String[] type = {AD, "ILS-", "HI-ILS-", "LOC-", "HI-LOC-", "LDA-", "SDA-", "GPS-", "RNAV-GPS-", "RNAV-RNP-", "VOR-", "HI-VOR-", "TACAN-", "HI-TACAN-", "NDB-", "COPTER-", "CUSTOM-", "LAHSO", "HOT-SPOT", "Min."};
 
             for(int i = 0; i < type.length; i++) {
                 if(o1.startsWith(type[i]) && (!o2.startsWith(type[i]))) {
@@ -718,7 +720,7 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
      * @return
      */
     public static boolean doesAirportHavePlates(String mapFolder, String id) {
-        return new File(mapFolder + "/plates/" + id).exists() || new File(mapFolder + "/area/" + id).exists();
+        return new File(mapFolder + "/plates/" + id).exists();
     }
 
     /**
