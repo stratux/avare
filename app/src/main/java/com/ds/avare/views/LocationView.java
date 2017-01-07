@@ -23,7 +23,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.Message;
@@ -36,6 +35,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
+import android.widget.TextView;
 
 import com.ds.avare.IWebsocket;
 import com.ds.avare.IWebsocketService;
@@ -70,7 +70,6 @@ import com.ds.avare.touch.BasicOnScaleGestureListener;
 import com.ds.avare.touch.GestureInterface;
 import com.ds.avare.touch.LongPressedDestination;
 import com.ds.avare.touch.LongTouchDestination;
-import com.ds.avare.userDefinedWaypoints.Waypoint;
 import com.ds.avare.utils.BitmapHolder;
 import com.ds.avare.utils.DisplayIcon;
 import com.ds.avare.utils.GenericCallback;
@@ -89,7 +88,6 @@ import com.ds.avare.weather.WindsAloft;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -951,6 +949,12 @@ public class LocationView extends View implements OnTouchListener, IWebsocketSer
         drawStatusLines(canvas);
       	drawEdgeMarkers(canvas); // Must be after the infolines
       	drawNavComments(canvas);
+
+        TextView lastAdsbUpdate = (TextView)((MainActivity)mContext).findViewById(R.id.lastAdsbMessage);
+        if( lastAdsbUpdate != null && mWebSocket != null ) {
+            int lastUpdateSeconds = (int) ((System.currentTimeMillis() - mWebSocket.getLastMessageReceived()) / 1000);
+            lastAdsbUpdate.setText(lastUpdateSeconds+"s");
+        }
     }    
 
     /**
@@ -1253,11 +1257,11 @@ public class LocationView extends View implements OnTouchListener, IWebsocketSer
                 setDest = (LongPressedDestination)vals[2];
 
                 if( setDest.getType().equals(Destination.GPS) ) {
-                    String[] coords = setDest.getName().split("&");
+                    String[] coords = setDest.getId().split("&");
                     lat = Double.parseDouble(coords[0]);
                     lon = Double.parseDouble(coords[1]);
                 } else {
-                    String loc = mService.getDBResource().findLonLat(setDest.getName(), setDest.getType());
+                    String loc = mService.getDBResource().findLonLat(setDest.getId(), setDest.getType());
                     if (loc != null) {
                         String[] coords = loc.split(",");
                         lon = Double.parseDouble(coords[0]);
@@ -1292,7 +1296,7 @@ public class LocationView extends View implements OnTouchListener, IWebsocketSer
                     // Don't add the airport if it's already the set destination
                     // For now, don't limit the distance
                     if ( /*navaidDistance < (Preferences.NEARBY_TOUCH_DISTANCE / mViewParams.getScaleFactor()) &&*/ setDest == null ||
-                            !(a.getId().equals(setDest.getName()) && setDest.getType().equals(Destination.BASE))) {
+                            !(a.getId().equals(setDest.getId()) && setDest.getType().equals(Destination.BASE))) {
 
                         locations.add(new LongPressedDestination(a.getId(), Destination.BASE, navaidDistance, a.getLat(), a.getLon()));
                     }
@@ -1310,7 +1314,7 @@ public class LocationView extends View implements OnTouchListener, IWebsocketSer
                             n.getCoords().getLongitude(), n.getCoords().getLatitude());
                     // For now, don't limit based on distance
                     if ( /*navaidDistance < (Preferences.NEARBY_TOUCH_DISTANCE / mViewParams.getScaleFactor()) &&*/ setDest == null ||
-                            !(n.getLocationId().equals(setDest.getName()) && setDest.getType().equals(Destination.NAVAID))) {
+                            !(n.getLocationId().equals(setDest.getId()) && setDest.getType().equals(Destination.NAVAID))) {
                         locations.add(new LongPressedDestination(n.getLocationId(), Destination.NAVAID, navaidDistance, n.getCoords().getLatitude(), n.getCoords().getLongitude()));
                     }
                 }
@@ -1327,7 +1331,7 @@ public class LocationView extends View implements OnTouchListener, IWebsocketSer
                 // For now, don't limit based on distance
                 // Don't add RNAV WP or Mil Rep fix types
                 if ( /*navaidDistance < (Preferences.NEARBY_TOUCH_DISTANCE / mViewParams.getScaleFactor()) &&*/ ( setDest == null ||
-                        !( fix.getId().equals(setDest.getName()) && setDest.getType().equals(Destination.FIX))) &&
+                        !( fix.getId().equals(setDest.getId()) && setDest.getType().equals(Destination.FIX))) &&
                         !(fix.getType().equals("YRNAV-WP") || fix.getType().equals("YMIL-REP-PT") || fix.getType().equals("NAWY-INTXN")))
                 {
                     locations.add(new LongPressedDestination(fix.getId(), Destination.FIX, navaidDistance, fix.getLat(), fix.getLon()));
@@ -1425,7 +1429,7 @@ public class LocationView extends View implements OnTouchListener, IWebsocketSer
             }
 
             if( setDest.getType().equals(Destination.BASE) ){
-                final String airport = setDest.getName();
+                final String airport = setDest.getId();
 
                 taf = mService.getDBResource().getTAF(airport);
                 if(isCancelled()) {
@@ -1509,8 +1513,8 @@ public class LocationView extends View implements OnTouchListener, IWebsocketSer
                  */
 
                 if(mPref.useAdsbWeather()) {
-                    taf = mService.getAdsbWeather().getTaf(destination.getName()); // MAYBE SHOULD MAKE THIS CONDITIONAL ON TYPE?
-                    metar = mService.getAdsbWeather().getMETAR(destination.getName());
+                    taf = mService.getAdsbWeather().getTaf(destination.getId()); // MAYBE SHOULD MAKE THIS CONDITIONAL ON TYPE?
+                    metar = mService.getAdsbWeather().getMETAR(destination.getId());
                     aireps = mService.getAdsbWeather().getAireps(lon, lat);
                     wa = mService.getAdsbWeather().getWindsAloft(lon, lat);
                     layer = mService.getAdsbWeather().getNexrad().getDate();
@@ -1575,9 +1579,9 @@ public class LocationView extends View implements OnTouchListener, IWebsocketSer
 
             Metar metar;
             if( useAdsbWeather ) {
-                metar = mService.getAdsbWeather().getMETAR(dest.getName());
+                metar = mService.getAdsbWeather().getMETAR(dest.getId());
             } else {
-                metar = mService.getDBResource().getMETAR(dest.getName());
+                metar = mService.getDBResource().getMETAR(dest.getId());
 
                 if (metar == null) { // in no metar on the field, try to find the closest metar
                     metar = mService.getDBResource().getClosestMETAR(dest.getLat(), dest.getLon());

@@ -16,7 +16,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -139,7 +138,7 @@ public class WebAppMapInterface {
                 String metar = "";
                 if(data.metar != null) {
                     metar = WeatherHelper.formatDistantMetarHeader(
-                                data.metar, WeatherHelper.DistantMetarFormat.NoStationId, data.destination.getName());
+                                data.metar, WeatherHelper.DistantMetarFormat.NoStationId, data.destination.getId());
                     metar += "<br>";
                     metar += WeatherHelper.formatMetarHTML(data.metar.rawText, mPref.isWeatherTranslated());
                     metar = "<hr><b><font color=\"yellow\">METAR </font>" + "<font color=\"" + WeatherHelper.metarColorString(data.metar.flightCategory) + "\"></b>" + metar +  "</font>";
@@ -193,7 +192,7 @@ public class WebAppMapInterface {
                     if(!data.performance.equals("")) {
                         performance = "<hr><b><font color=\"yellow\">Performance</font></b> ";
                         performance += WeatherHelper.formatDistantMetarHeader(
-                                data.metar, WeatherHelper.DistantMetarFormat.WithStationId, data.destination.getName());
+                                data.metar, WeatherHelper.DistantMetarFormat.WithStationId, data.destination.getId());
                         performance += "<br>";
                         performance += data.performance.replace("\n", "<br>");
                     }

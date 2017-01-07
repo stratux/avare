@@ -4,18 +4,18 @@ package com.ds.avare.touch;
  * Created by pasniak on 12/4/2016.
  */
 public class LongPressedDestination implements Comparable<LongPressedDestination> {
-    private String name, type;
+    private String id, type;
     private double distance;
     private double lat, lon;
     private String weatherColor = "#ffffff";
-    public LongPressedDestination(String name, String type) {
-        this.name = name;
+    public LongPressedDestination(String id, String type) {
+        this.id = id;
         this.type = type;
         this.distance = 0.0;
     }
 
-    public LongPressedDestination(String name, String type, double distance, double lat, double lon) {
-        this.name = name;
+    public LongPressedDestination(String id, String type, double distance, double lat, double lon) {
+        this.id = id;
         this.type = type;
         this.distance = distance;
         this.lat = lat;
@@ -50,8 +50,8 @@ public class LongPressedDestination implements Comparable<LongPressedDestination
         return lat + "&" + lon;
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
     public String getType() {
@@ -60,7 +60,7 @@ public class LongPressedDestination implements Comparable<LongPressedDestination
 
     public String toJSON() {
         String json = "{";
-        json += "\"name\":\"" + this.name + "\",";
+        json += "\"id\":\"" + this.id + "\",";
         json += "\"type\":\"" + this.type + "\",";
         json += "\"distance\":\"" + this.distance + "\",";
         json += "\"weatherColor\":\"" + this.weatherColor + "\"";

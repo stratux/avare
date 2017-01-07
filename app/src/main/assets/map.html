@@ -71,7 +71,7 @@ authors: zkhan
             selectedLocation = JSON.parse(selectedLocation);
 
             // Set the selected location information
-            this_location = selectedLocation.name;
+            this_location = selectedLocation.id;
             this_type = selectedLocation.type;
 
             locHeader = document.getElementById("nearbyHeader");
@@ -88,7 +88,7 @@ authors: zkhan
                 for( var i = 0; i < nearbyLocations.length; i++ ) {
                     // The top-level container/button
                     var button = document.createElement("button");
-                    button.setAttribute("onclick","javascript:changeLocation('" + nearbyLocations[i].name + "','" + nearbyLocations[i].type + "');");
+                    button.setAttribute("onclick","javascript:changeLocation('" + nearbyLocations[i].id + "','" + nearbyLocations[i].type + "');");
                     button.className = "locationButton btn-group btn";
                     button.style.borderColor = nearbyLocations[i].weatherColor;
 
@@ -107,9 +107,9 @@ authors: zkhan
                     }
 
                     // Add the name
-                    var locationButtonName = nearbyLocations[i].name;
+                    var locationButtonName = nearbyLocations[i].id;
                     if( nearbyLocations[i].type == "GPS" ) {
-                        var coords = nearbyLocations[i].name.split("&");
+                        var coords = nearbyLocations[i].id.split("&");
                         locationButtonName = Number(coords[0]).toFixed(2) + "&" + Number(coords[1]).toFixed(2);
                     }
                     var locationName = document.createTextNode(locationButtonName);

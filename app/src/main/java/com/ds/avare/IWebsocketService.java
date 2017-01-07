@@ -25,6 +25,7 @@ import com.ds.avare.storage.Preferences;
 import com.ds.avare.utils.Helper;
 import com.ds.avare.utils.MetarFlightCategory;
 
+import org.java_websocket.WebSocket;
 import org.java_websocket.drafts.Draft_17;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,6 +74,16 @@ public class IWebsocketService extends Service
     private Preferences mPref;
     private boolean mReconnect = true;
     private long mLastConnect;
+
+    public long getLastMessageReceived() {
+        if(client.getReadyState() == WebSocket.READYSTATE.OPEN && System.currentTimeMillis() - lastMessageReceived > 30000) {
+            Log.d("WebSocket", "No messages in 30s, restarting websocket");
+            client.close();
+        }
+        return lastMessageReceived;
+    }
+
+    private long lastMessageReceived;
     private WebSocketClient client;
     private List<Listener> listeners = Collections.synchronizedList(new ArrayList<Listener>());
 
@@ -111,6 +122,7 @@ public class IWebsocketService extends Service
         URI uri;
         String mConnectAddr;
 
+        lastMessageReceived = 0;
         mLastConnect=System.currentTimeMillis();
         if (mPref != null) {
             mConnectAddr = mPref.getStratuxIpAddress();
@@ -130,11 +142,16 @@ public class IWebsocketService extends Service
         client = new WebSocketClient(uri, new Draft_17()) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
+                Log.d("WebSocket","Opened");
+
                 sendMessage("Connected");
             }
 
             @Override
             public void onMessage(String s) {
+                Log.d("WebSocket","Message Received");
+
+                lastMessageReceived = System.currentTimeMillis();
                 Message msg = mHandlerWeb.obtainMessage();
                 final String message = s;
                 msg.obj = s;
@@ -144,6 +161,7 @@ public class IWebsocketService extends Service
 
             @Override
             public void onClose(int i, String s, boolean b) {
+                Log.i("WebSocket","Closed");
                 sendMessage("Disconnected");
 
                 if(mReconnect) {

@@ -570,7 +570,7 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
                          * A/FD
                          */
                         if (dest.getType().equals(Destination.BASE)) {
-                            mService.setLastAfdAirport(dest.getName());
+                            mService.setLastAfdAirport(dest.getId());
                             ((MainActivity) getContext()).showAfdViewAndCenter();
                         }
                     } else if (action == WebAppMapInterface.MSG_PLATE) {
@@ -578,7 +578,7 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
                          * Plate
                          */
                         if (dest.getType().equals(Destination.BASE)) {
-                            mService.setLastPlateAirport(dest.getName());
+                            mService.setLastPlateAirport(dest.getId());
                             mService.setLastPlateIndex(0);
                             ((MainActivity) getContext()).showPlatesViewAndCenter();
                         }
@@ -586,12 +586,12 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
                         /*
                          * Plan
                          */
-                        planTo(dest.getName(), dest.getType());
+                        planTo(dest.getId(), dest.getType());
                     } else if (action == WebAppMapInterface.MSG_DIRECT) {
                         /*
                          * Direct To
                          */
-                        goTo(dest.getName(), dest.getType());
+                        goTo(dest.getId(), dest.getType());
                     } else if (action == WebAppMapInterface.MSG_CHANGE_LOCATION) {
                         ((MainActivity) getContext()).showLocationDialog(dest);
                     }
