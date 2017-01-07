@@ -43,7 +43,8 @@ public class WeatherHelper {
         	// magenta
             return(0xffff54f9);                       
         }
-        return(0xffffffff);
+        // Change to gray if unknown instead of white
+        return(0xff444444);
     }
     
     /**

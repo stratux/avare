@@ -16,6 +16,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.CoordinatorLayout;
@@ -60,6 +64,7 @@ import com.ds.avare.utils.NetworkHelper;
 import com.ds.avare.utils.Tips;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,7 +72,7 @@ import java.util.Map;
  */
 public class MainActivity extends AppCompatActivity implements
         TabLayout.OnTabSelectedListener,
-        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String SELECTED_NAV_ITEM_ID_KEY = "selectedNavItemId";
 
@@ -165,6 +170,9 @@ public class MainActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, StorageService.class);
         startService(intent);
 
+        Intent newintent = new Intent(this, IWebsocketService.class);
+        startService(newintent);
+
         mTabLayout.setVisibility(mPref.getHideTabBar() ? View.GONE : View.VISIBLE);
         mToolbar.setVisibility(mPref.getHideToolbar() ? View.GONE : View.VISIBLE);
 
@@ -198,6 +206,10 @@ public class MainActivity extends AppCompatActivity implements
             });
             mWarnDialog.show();
         }
+
+        mPref.registerListener(this);
+        connectWiFi();
+
     }
 
     private void setupTabs(TabLayout tabLayout) {
@@ -384,8 +396,15 @@ public class MainActivity extends AppCompatActivity implements
                  */
                 Intent intent = new Intent(this, StorageService.class);
                 stopService(intent);
+
+                Intent newintent = new Intent(this, IWebsocketService.class);
+                stopService(newintent);
+
             }
         }
+        // stop the web socket
+        Intent intent = new Intent(this, IWebsocketService.class);
+        stopService(intent);
         super.onDestroy();
     }
 
@@ -514,6 +533,70 @@ public class MainActivity extends AppCompatActivity implements
 
     public Menu getNavigationMenu() {
         return mNavigationView.getMenu();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals(getString(R.string.prefWiFiSSID))
+         ||key.equals(getString(R.string.prefAutoConnectWiFi))) {
+            connectWiFi();
+        }
+    }
+
+    /**
+     * Connect to WiFi network
+     * @param SSID network to connect to
+     */
+    private void connectWiFi() {
+        if(mPref.getAutoConnectWiFi()) {
+            final String SSID = mPref.getWiFiSSID();
+            (new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        int ap = -1;
+                        String check = "\"" + SSID + "\"";
+                        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                        List<WifiConfiguration> networks = wifiManager.getConfiguredNetworks();
+
+                        if(networks!=null) {
+                            // look for the network
+                            for (WifiConfiguration wifi : networks) {
+                                if (check.equals(wifi.SSID)) {
+                                    ap = wifi.networkId;
+                                    break;
+                                }
+                            }
+                        }
+
+                        /* Let's not add the network, make the user do it
+                        if(ap!=-1) {
+                            WifiConfiguration wifi = new WifiConfiguration();
+                            wifi.SSID=SSID;
+                            ap=wifiManager.addNetwork(wifi);
+                        }
+                        */
+                        // make sure we aren't already connected to selected network
+                        if(ap!=-1) {
+                            WifiInfo wifi=wifiManager.getConnectionInfo();
+                            if(wifi!=null) {
+                                if(wifi.getNetworkId()==ap) {
+                                    // don't reconnect!
+                                    ap=-1;
+                                }
+                            }
+                        }
+                        if (ap != -1) {
+                            wifiManager.disconnect();
+                            wifiManager.enableNetwork(ap, true);
+                        }
+                    }
+                    catch(Exception e) {
+                        System.out.println("Network error: "+e.getMessage());
+                    }
+                }
+            })).start();
+        }
     }
 
 }
