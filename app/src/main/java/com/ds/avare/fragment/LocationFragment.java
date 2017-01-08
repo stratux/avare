@@ -24,7 +24,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatSpinner;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,8 +44,6 @@ import android.widget.ImageButton;
 import com.ds.avare.ChartsDownloadActivity;
 import com.ds.avare.MainActivity;
 import com.ds.avare.R;
-import com.ds.avare.animation.TwoButton;
-import com.ds.avare.animation.TwoButton.TwoClickListener;
 import com.ds.avare.flight.FlightStatusInterface;
 import com.ds.avare.gps.Gps;
 import com.ds.avare.gps.GpsParams;
@@ -61,9 +58,9 @@ import com.ds.avare.touch.GestureInterface;
 import com.ds.avare.touch.LongTouchDestination;
 import com.ds.avare.utils.DecoratedAlertDialogBuilder;
 import com.ds.avare.utils.GenericCallback;
-import com.ds.avare.utils.Helper;
 import com.ds.avare.utils.InfoLines.InfoLineFieldLoc;
 import com.ds.avare.views.LocationView;
+import com.ds.avare.touch.LongPressedDestination;
 import com.ds.avare.webinfc.WebAppMapInterface;
 
 import java.io.File;
@@ -116,7 +113,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
     private ImageButton mDrawButton;
     private Bundle mExtras;
     private boolean mIsWaypoint;
-    private String mAirportPressed;
     private AlertDialog mAlertDialogDestination;
     private WebAppMapInterface mInfc;
 
@@ -158,42 +154,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
             }
         }
     };
-
-    /**
-     *
-     * @param dest
-     * @return
-     */
-    private boolean isSameDest(String dest) {
-        if(mService != null) {
-            Destination cdest = mService.getDestination();
-            if(cdest != null) {
-                if(dest.contains("&")) {
-                    /*
-                     * GPS dest needs comparison with closeness.
-                     */
-                    String tokens[] = dest.split("&");
-                    double lon;
-                    double lat;
-                    try {
-                        lon = Double.parseDouble(tokens[1]);
-                        lat = Double.parseDouble(tokens[0]);
-                    }
-                    catch(Exception e) {
-                        return false;
-                    }
-                    if(Helper.isSameGPSLocation(cdest.getLocation().getLongitude(),
-                            cdest.getLocation().getLatitude(), lon, lat)) {
-                        return true;
-                    }
-                }
-                else if(dest.equals(cdest.getID())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     /**
      *
@@ -388,19 +348,12 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
                         mInfc.setData(data);
                     }
                     mAlertDialogDestination.show();
-
-                    /*
-                     * Show the popout
-                     * Now populate the pop out weather etc.
-                     */
-                    mAirportPressed = data.airport;
                 }
             }
 
         });
 
         mChartsButton = (ImageButton) view.findViewById(R.id.location_button_charts);
-        mChartsButton.getBackground().setAlpha(255);
         mChartsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -409,7 +362,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
         });
 
         mLayersButton = (ImageButton) view.findViewById(R.id.location_button_layers);
-        mLayersButton.getBackground().setAlpha(255);
         mLayersButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -418,7 +370,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
         });
 
         mCenterButton = (ImageButton) view.findViewById(R.id.location_button_center);
-        mCenterButton.getBackground().setAlpha(255);
         mCenterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -446,7 +397,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
         });
 
         mDrawClearButton = (ImageButton) view.findViewById(R.id.location_button_draw_clear);
-        mDrawClearButton.getBackground().setAlpha(255);
         mDrawClearButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -462,7 +412,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
          * Draw
          */
         mDrawButton = (ImageButton) view.findViewById(R.id.location_button_draw);
-        mDrawButton.getBackground().setAlpha(255);
         mDrawButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -607,57 +556,44 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
                 @Override
                 public Object callback(Object o, Object o1) {
 
-                    String param = (String) o;
-                    String airport = (String) o;
+                    int action = (int) o;
+                    LongPressedDestination dest = (LongPressedDestination) o1;
 
                     mAlertDialogDestination.dismiss();
 
-                    if (null == mAirportPressed) {
-                        return null;
-                    }
                     if (mService == null) {
                         return null;
                     }
 
-                    if (param.equals("A/FD")) {
+                    if (action == WebAppMapInterface.MSG_AFD) {
                         /*
                          * A/FD
                          */
-                        if (!mAirportPressed.contains("&")) {
-                            mService.setLastAfdAirport(mAirportPressed);
+                        if (dest.getType().equals(Destination.BASE)) {
+                            mService.setLastAfdAirport(dest.getName());
                             ((MainActivity) getContext()).showAfdViewAndCenter();
                         }
-                        mAirportPressed = null;
-                    } else if (param.equals("Plate")) {
+                    } else if (action == WebAppMapInterface.MSG_PLATE) {
                         /*
                          * Plate
                          */
-                        if (!mAirportPressed.contains("&")) {
-                            mService.setLastPlateAirport(mAirportPressed);
+                        if (dest.getType().equals(Destination.BASE)) {
+                            mService.setLastPlateAirport(dest.getName());
                             mService.setLastPlateIndex(0);
                             ((MainActivity) getContext()).showPlatesViewAndCenter();
                         }
-                        mAirportPressed = null;
-                    } else if (param.equals("+Plan")) {
-                        String type = Destination.BASE;
-                        if (mAirportPressed.contains("&")) {
-                            type = Destination.GPS;
-                        }
-                        planTo(mAirportPressed, type);
-                        mAirportPressed = null;
-                    } else if (param.equals("->D")) {
-
+                    } else if (action == WebAppMapInterface.MSG_PLAN) {
                         /*
-                         * On click, find destination that was pressed on in view
-                         * If button pressed was a destination go there, otherwise if none, then delete current dest
+                         * Plan
                          */
-                        String dest = mAirportPressed;
-                        mAirportPressed = null;
-                        String type = Destination.BASE;
-                        if (dest.contains("&")) {
-                            type = Destination.GPS;
-                        }
-                        goTo(dest, type);
+                        planTo(dest.getName(), dest.getType());
+                    } else if (action == WebAppMapInterface.MSG_DIRECT) {
+                        /*
+                         * Direct To
+                         */
+                        goTo(dest.getName(), dest.getType());
+                    } else if (action == WebAppMapInterface.MSG_CHANGE_LOCATION) {
+                        ((MainActivity) getContext()).showLocationDialog(dest);
                     }
                     return null;
                 }
@@ -854,10 +790,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
                 mPref.isTrackUp() ? 0xFF00FF00 : 0xFF444444,
                 PorterDuff.Mode.MULTIPLY
         );
-        mLayersButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
-        mChartsButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
-        mDrawClearButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
-        mDrawButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
     }
 
     @Override
@@ -1170,6 +1102,11 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
                     public void onNothingSelected(AdapterView<?> parent) { }
                 }
         );
+    }
+
+    // Callback to show the location info popup on LocationView
+    public void showLocationPopup(LongPressedDestination location) {
+        mLocationView.showLocationModal(location);
     }
 
     @Override

@@ -20,6 +20,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Environment;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 
 import com.ds.avare.MainActivity;
@@ -64,6 +65,8 @@ public class Preferences {
     public static final int MAX_AREA_AIRPORTS = 20;
 
     public static final double MIN_TOUCH_MOVEMENT_SQ_DISTANCE = 0.001;
+    public static final double NEARBY_TOUCH_DISTANCE = 5.0;
+    public static final int MAX_NEARBY_POINTS = 10;
 
     /*
      * Max memory and max screen size it will support
@@ -156,7 +159,10 @@ public class Preferences {
             val = "0";
         }
         if (val.equals("0")) {
-            return "http://avare.stratux.me/old/";
+            return "http://www.apps4av.org/new/";
+        }
+        if (val.equals("1")) {
+            return "http://192.168.0.2:83/new/";
         }
         return ("");
     }
@@ -1187,6 +1193,13 @@ public class Preferences {
     public String getAircraftTailNumber() {
         return mPref.getString(mContext.getString(R.string.AircraftTailNumber), "N1TEST");
     }
+    public String getStratuxIpAddress() {
+        return mPref.getString(mContext.getString(R.string.StratuxIp),"192.168.10.1");
+    }
+
+//    public boolean isStratuxIpEnabled() {
+//        return mPref.getBoolean(mContext.getString(R.string.StratuxIpEnable), true);
+//    }
 
     public String getPilotContact() {
         return mPref.getString(mContext.getString(R.string.PilotContact), "TEST PILOT 1-800-WX-BRIEF");
@@ -1256,6 +1269,22 @@ public class Preferences {
         SharedPreferences.Editor edit = mPref.edit();
         edit.putFloat(mContext.getString(R.string.prefZoomLevel), zoom);
         edit.commit();
+    }
+
+    public void registerListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        mPref.registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    public void unregisterListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        mPref.unregisterOnSharedPreferenceChangeListener(listener);
+    }
+
+    public boolean getAutoConnectWiFi() {
+        return mPref.getBoolean(mContext.getString(R.string.prefAutoConnectWiFi),false);
+    }
+
+    public String getWiFiSSID() {
+        return mPref.getString(mContext.getString(R.string.prefWiFiSSID), "stratux");
     }
 
     public boolean isVerticalPfd() {

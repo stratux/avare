@@ -181,7 +181,7 @@ public class Traffic {
             }
 
 
-            float radius = ctx.dip2pix * 8;
+            float radius = ctx.dip2pix * 7;
             /*
              * Draw outline to show it clearly
              */
@@ -221,13 +221,13 @@ public class Traffic {
              * Show a barb for heading with length based on speed
              * Vel can be 0 to 4096 knots (practically it can be 0 to 500 knots), so set from length 0 to 100 pixels (1/5)
              */
-            float speedLength = radius + (float)t.mHorizVelocity * (float)ctx.dip2pix / 5.f;
+//            float speedLength = radius + (float)t.mHorizVelocity * (float)ctx.dip2pix / 5.f;
             /*
              * Rotation of points to show direction
              */
-            double xr = x + PixelCoordinate.rotateX(speedLength, t.mHeading);
-            double yr = y + PixelCoordinate.rotateY(speedLength, t.mHeading);
-            ctx.canvas.drawLine(x, y, (float)xr, (float)yr, ctx.paint);
+//            double xr = x + PixelCoordinate.rotateX(speedLength, t.mHeading);
+//            double yr = y + PixelCoordinate.rotateY(speedLength, t.mHeading);
+//            ctx.canvas.drawLine(x, y, (float)xr, (float)yr, ctx.paint);
 
             /*
              * If in track-up mode, rotate canvas around screen x/y of
@@ -245,7 +245,7 @@ public class Traffic {
                     text, Color.BLACK, (float)x, (float)y + radius + ctx.textPaint.getTextSize());
 
             ctx.service.getShadowedText().draw(ctx.canvas, ctx.textPaint,
-                    text2, Color.BLACK, (float)x, (float)y + radius + (ctx.textPaint.getTextSize()*2));
+                    text2, Color.BLACK, (float)x, (float)y + radius + 4 + (ctx.textPaint.getTextSize()*2));
 
             if (true == bRotated) {
                 ctx.canvas.restore();
