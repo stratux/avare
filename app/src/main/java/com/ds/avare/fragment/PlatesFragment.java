@@ -12,10 +12,13 @@ Redistribution and use in source and binary forms, with or without modification,
 package com.ds.avare.fragment;
 
 import android.content.DialogInterface;
+import android.graphics.ColorMatrixColorFilter;
+
 import android.graphics.PorterDuff;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceScreen;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -26,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.ds.avare.MainActivity;
 import com.ds.avare.R;
@@ -42,6 +46,7 @@ import com.ds.avare.plan.Cifp;
 import com.ds.avare.storage.Preferences;
 import com.ds.avare.storage.StringPreference;
 import com.ds.avare.utils.DecoratedAlertDialogBuilder;
+import com.ds.avare.utils.Drawing;
 import com.ds.avare.utils.PngCommentReader;
 import com.ds.avare.views.PlatesView;
 
@@ -69,13 +74,15 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
     private Button mAirportButton;
     private Button mPlatesButton;
     private Button mApproachButton;
-    private Button mPlatesTimerButton;
+    private Button mPlatesTicker;
+    private ImageButton mSettingsButton;
+    private ImageButton mPlatesTimerButton;
     private Chronometer mChronometer;
     private AlertDialog mPlatesPopup;
     private AlertDialog mApproachPopup;
     private AlertDialog mAirportPopup;
-    private Button mDrawClearButton;
-    private TwoButton mDrawButton;
+    private ImageButton mDrawClearButton;
+    private ImageButton mDrawButton;
     private Destination mDest;
     private ArrayList<String> mListPlates;
     private ArrayList<String> mListApproaches;
@@ -250,7 +257,8 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
          */
         mChronometer = (Chronometer) view.findViewById(R.id.plates_chronometer);
         mCounting = false;
-        mPlatesTimerButton = (Button) view.findViewById(R.id.plates_button_timer);
+        mPlatesTimerButton = (ImageButton) view.findViewById(R.id.plates_button_timer);
+        mPlatesTicker = (Button) view.findViewById(R.id.plates_ticker);
         mPlatesTimerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -262,28 +270,29 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
                     mChronometer.setBase(SystemClock.elapsedRealtime());
                     mChronometer.start();
                     mChronometer.setOnChronometerTickListener(PlatesFragment.this);
+                    mPlatesTimerButton.setColorFilter(new ColorMatrixColorFilter(Drawing.NEGATIVE));
+                    mPlatesTimerButton.getBackground().setColorFilter(0xFFBBBBBB, PorterDuff.Mode.MULTIPLY);
+                    mPlatesTicker.setVisibility(View.VISIBLE);
                 }
                 else {
                     mCounting = false;
                     mChronometer.setOnChronometerTickListener(null);
-                    mPlatesTimerButton.setText(getString(R.string.Timer));
+                    mPlatesTimerButton.clearColorFilter();
+                    mPlatesTimerButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
+                    mPlatesTicker.setVisibility(View.INVISIBLE);
                 }
             }
         });
-        if(mPref.removeB2Plate()) {
-            mPlatesTimerButton.setVisibility(View.INVISIBLE);
-        }
-
+        mPlatesTimerButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
 
         /*
          * Draw
          */
-        mDrawButton = (TwoButton) view.findViewById(R.id.plate_button_draw);
-        mDrawButton.setTwoClickListener(new TwoClickListener() {
-
+        mDrawButton = (ImageButton) view.findViewById(R.id.plates_button_draw);
+        mDrawButton.getBackground().setAlpha(255);
+        mDrawButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 /*
                  * Bring up preferences
                  */
@@ -291,21 +300,20 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
                     mPlatesView.setDraw(true);
                     mTouchMode = com.ds.avare.touch.Constants.TouchMode.DRAW_MODE;
                     mDrawClearButton.setVisibility(View.VISIBLE);
+                    mDrawButton.setColorFilter(new ColorMatrixColorFilter(Drawing.NEGATIVE));
+                    mDrawButton.getBackground().setColorFilter(0xFFBBBBBB, PorterDuff.Mode.MULTIPLY);
                 }
                 else {
                     mPlatesView.setDraw(false);
                     mTouchMode = com.ds.avare.touch.Constants.TouchMode.PAN_MODE;
                     mDrawClearButton.setVisibility(View.INVISIBLE);
+                    mDrawButton.clearColorFilter();
+                    mDrawButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
                 }
             }
-
         });
 
-        if(mPref.removeB1Plate()) {
-            mDrawButton.setVisibility(View.INVISIBLE);
-        }
-
-        mDrawClearButton = (Button)view.findViewById(R.id.plate_button_draw_clear);
+        mDrawClearButton = (ImageButton)view.findViewById(R.id.plates_button_draw_clear);
         mDrawClearButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -370,6 +378,19 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
             }
         });
 
+        mSettingsButton = (ImageButton) view.findViewById(R.id.plates_button_settings);
+        mSettingsButton.getBackground().setAlpha(255);
+        mSettingsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RelativeLayout settingsList = (RelativeLayout) v.getRootView().findViewById(R.id.plates_settings);
+                if( settingsList.getVisibility() == View.VISIBLE) {
+                    settingsList.setVisibility(View.INVISIBLE);
+                } else {
+                    settingsList.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void setPlateFromPos(int pos) {
@@ -634,8 +655,21 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
                 mPref.isTrackUpPlates() ? 0xFF00FF00 : 0xFF444444,
                 PorterDuff.Mode.MULTIPLY
         );
+
+        mSettingsButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
+        mDrawClearButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
+        mDrawButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
+        setDrawButtonVisibility();
+        setTimerButtonVisibility();
     }
 
+    private void setDrawButtonVisibility() {
+        mDrawButton.setVisibility(mPref.getHideDrawButton() ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    private void setTimerButtonVisibility() {
+        mPlatesTimerButton.setVisibility(mPref.removeB2Plate() ? View.INVISIBLE : View.VISIBLE);
+    }
     /**
      *
      * @author zkhan
@@ -712,7 +746,7 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
         /*
          * Set the label of timer button to time
          */
-        mPlatesTimerButton.setText(chronometer.getText());
+        mPlatesTicker.setText(chronometer.getText());
     }
 
     @Override

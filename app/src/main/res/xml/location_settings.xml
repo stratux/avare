@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/ADSBWeather"
+        android:summary="@string/ADSBWeatherSummary"
+        android:title="@string/ADSBWeatherLabel"
+        android:layout="@layout/custom_preference"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/ShowLabelMETARS"
+        android:summary="@string/ShowLabelMETARSSummary"
+        android:title="@string/ShowLabelMETARS"
+        android:layout="@layout/custom_preference"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/ShowWindBarbs"
+        android:summary="@string/ShowWindBarbsSummary"
+        android:title="@string/ShowWindBarbs"
+        android:layout="@layout/custom_preference"/>
+    <com.ds.avare.utils.EditTextPreferenceWithSummary
+        android:defaultValue="5"
+        android:key="@string/NearestMETARRadius"
+        android:summary="@string/NearestMETARRadiusSummary"
+        android:title="@string/NearestMETARRadiusLabel"
+        android:layout="@layout/custom_preference" />
+    <com.ds.avare.utils.ListPreferenceWithSummary
+        android:defaultValue="39"
+        android:entries="@array/WindsAloftAltitude"
+        android:entryValues="@array/WindsAloftAltitude"
+        android:key="@string/WindsAloftCeiling"
+        android:summary="@string/WindsAloftCeilingSummary"
+        android:title="@string/WindsAloftCeiling"
+        android:layout="@layout/custom_preference" />
+    <com.ds.avare.utils.ListPreferenceWithSummary
+        android:defaultValue="0"
+        android:entries="@array/DistanceRingTypePrompts"
+        android:entryValues="@array/DistanceRingTypeValues"
+        android:key="@string/prefDistanceRingType"
+        android:summary="@string/DistanceRingTypeSummary"
+        android:title="@string/DistanceRingTypeLabel"
+        android:layout="@layout/custom_preference" />
+    <com.ds.avare.utils.ListPreferenceWithSummary
+        android:defaultValue="Default"
+        android:entries="@array/DistanceRingColors"
+        android:entryValues="@array/DistanceRingColors"
+        android:key="@string/prefDistanceRingColors"
+        android:summary="@string/DistanceRingColorsSummary"
+        android:title="@string/DistanceRingColorsLabel"
+        android:layout="@layout/custom_preference" />
+</PreferenceScreen>

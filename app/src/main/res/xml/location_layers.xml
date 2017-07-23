@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:textColor="#FFFFFF"
+        android:defaultValue="false"
+        android:key="@string/layerMetars"
+        android:summary="@string/layerMetarsSummary"
+        android:title="@string/layerMetarsLabel"
+        android:layout="@layout/custom_preference" />
+    <CheckBoxPreference
+        android:textColor="#FFFFFF"
+        android:defaultValue="false"
+        android:key="@string/layerNexrad"
+        android:summary="@string/layerNexradSummary"
+        android:title="@string/layerNexradLabel"
+        android:layout="@layout/custom_preference" />
+    <com.ds.avare.utils.ListPreferenceWithSummary
+        android:defaultValue="ALL"
+        android:entries="@array/AirSig"
+        android:entryValues="@array/AirSig"
+        android:key="@string/AirSigType"
+        android:summary="@string/AirSigTypeSummary"
+        android:title="@string/AirSigTypeLabel"
+        android:layout="@layout/custom_preference"/>
+        <CheckBoxPreference
+        android:textColor="#FFFFFF"
+        android:defaultValue="false"
+        android:key="@string/layerPlate"
+        android:summary="@string/layerPlateSummary"
+        android:title="@string/layerPlateLabel"
+        android:layout="@layout/custom_preference" />
+    <CheckBoxPreference
+        android:textColor="#FFFFFF"
+        android:defaultValue="false"
+        android:key="@string/TFRShading"
+        android:title="@string/TFRShadingLabel"
+        android:layout="@layout/custom_preference"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/CAPGrid"
+        android:summary="@string/CAPGridSummary"
+        android:title="@string/CAPGridLabel"
+        android:layout="@layout/custom_preference"/>
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/Runways"
+        android:summary="@string/RunwaysSummary"
+        android:title="@string/RunwaysLabel"
+        android:layout="@layout/custom_preference"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/Obstacles"
+        android:summary="@string/ObstaclesSummary"
+        android:title="@string/ObstaclesLabel"
+        android:layout="@layout/custom_preference"/>
+</PreferenceScreen>

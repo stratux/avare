@@ -24,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.RelativeLayout;
 
 import com.ds.avare.R;
 import com.ds.avare.StorageService;
@@ -164,6 +165,10 @@ public class PlatesView extends View implements OnTouchListener {
     public boolean onTouch(View view, MotionEvent e) {
         boolean retVal = mGestureDetector.onTouchEvent(e);
         retVal = mScaleDetector.onTouchEvent(e) || retVal;
+
+        RelativeLayout settingsList = (RelativeLayout) getRootView().findViewById(R.id.plates_settings);
+        settingsList.setVisibility(View.INVISIBLE);
+
         return retVal;
     }
 

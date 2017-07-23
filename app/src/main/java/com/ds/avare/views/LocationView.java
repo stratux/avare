@@ -30,6 +30,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
+import android.widget.RelativeLayout;
 
 import com.ds.avare.MainActivity;
 import com.ds.avare.R;
@@ -132,7 +133,6 @@ public class LocationView extends View implements OnTouchListener {
     private String                      mErrorStatus;
    
     // Which layer to draw
-    private  String                     mLayerType;
     private Layer                       mLayer;
 
     /**
@@ -376,6 +376,11 @@ public class LocationView extends View implements OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent e) {
 
+        RelativeLayout layersList = (RelativeLayout) getRootView().findViewById(R.id.location_preferences);
+        layersList.setVisibility(View.INVISIBLE);
+        RelativeLayout settingsList = (RelativeLayout) getRootView().findViewById(R.id.location_settings);
+        settingsList.setVisibility(View.INVISIBLE);
+
         boolean bPassToGestureDetector = true;
         
         if(e.getAction() == MotionEvent.ACTION_UP) {
@@ -575,11 +580,11 @@ public class LocationView extends View implements OnTouchListener {
      * @param ctx
      */
     private void drawLayers(Canvas canvas, DrawingContext ctx) {
-        if(mLayerType == null || null != mPointProjection || 0 == mPref.showLayer()) {
+        if(null != mPointProjection) {
             return;
         }
 
-        if(mLayerType.equals("Plate")) {
+        if(mPref.showPlate()) {
             BitmapHolder b = mService.getPlateDiagram();
 
             if(b == null || b.getBitmap() == null) {
@@ -617,40 +622,33 @@ public class LocationView extends View implements OnTouchListener {
             mPaint.setAlpha(mPref.showLayer());
 
         }
-        else if(ctx.pref.useAdsbWeather()) {
-            if (mLayerType.equals("NEXRAD")) {
-                NexradBitmap.draw(ctx, mService.getAdsbWeather().getNexrad(),
-                        mService.getAdsbWeather().getNexradConus(), null == mPointProjection);
-            }
-            else if (mLayerType.equals("METAR")) {
+        if(mPref.showMetars()) {
+            if(mPref.useAdsbWeather()) {
                 AdsbWeatherCache.drawMetars(ctx, mService.getAdsbWeather().getAllMetars(), null == mPointProjection);
                 AdsbWeatherCache.drawUATTowers(ctx, mService.getAdsbWeather().getAllUatTowers(), null == mPointProjection);
-            }
-        }
-        else {
-
-            if (mLayerType.equals("NEXRAD")) {
-                // draw nexrad
-                mLayer = mService.getRadarLayer();
-            } else if (mLayerType.equals("METAR")) {
-                // draw metar flight catergory
-                mLayer = ctx.service.getMetarLayer();
             } else {
-                mLayer = null;
-                return;
+                mLayer = ctx.service.getMetarLayer();
+                if (!mLayer.isOld(ctx.pref.getExpiryTime())) {
+                    mPaint.setAlpha(mPref.showLayer());
+                    mLayer.draw(canvas, mPaint, mOrigin);
+                    mPaint.setAlpha(255);
+                }
             }
-
-            /*
-             * layer is way too old.
-             */
-            if (mLayer.isOld(ctx.pref.getExpiryTime())) {
-                return;
-            }
-
-            mPaint.setAlpha(mPref.showLayer());
-            mLayer.draw(canvas, mPaint, mOrigin);
-            mPaint.setAlpha(255);
         }
+        if(mPref.showNexrad()) {
+            if(mPref.useAdsbWeather()) {
+                NexradBitmap.draw(ctx, mService.getAdsbWeather().getNexrad(),
+                        mService.getAdsbWeather().getNexradConus(), null == mPointProjection);
+            } else {
+                mLayer = mService.getRadarLayer();
+                if (!mLayer.isOld(ctx.pref.getExpiryTime())) {
+                    mPaint.setAlpha(mPref.showLayer());
+                    mLayer.draw(canvas, mPaint, mOrigin);
+                    mPaint.setAlpha(255);
+                }
+            }
+        }
+
     }
 
     /**
@@ -1575,7 +1573,6 @@ public class LocationView extends View implements OnTouchListener {
         
     }
 
-
     /**
      * Center to the location
      */
@@ -1815,20 +1812,4 @@ public class LocationView extends View implements OnTouchListener {
     public void zoomOut() {
         mViewParams.getScale().zoomOut();
     }
-
-    public void setLayerType(String type) {
-        mLayerType = type;
-        if(mService == null) {
-
-        }
-        else if(mLayerType.equals("NEXRAD")) {
-            mService.getRadarLayer().parse();
-        }
-        else if(mLayerType.equals("METAR")) {
-            mService.getMetarLayer().parse();
-        }
-
-        invalidate();
-    }
-
 }
