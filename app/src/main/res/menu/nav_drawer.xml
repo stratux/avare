@@ -29,11 +29,6 @@
             app:actionViewClass="android.support.v7.widget.AppCompatSpinner"
             app:showAsAction="always" />
         <item
-            android:id="@+id/nav_action_map_layer"
-            android:title="Layer"
-            app:actionViewClass="android.support.v7.widget.AppCompatSpinner"
-            app:showAsAction="always" />
-        <item
             android:id="@+id/nav_action_map_tracks"
             android:title="Tracks"
             app:actionViewClass="android.support.v7.widget.AppCompatCheckBox"

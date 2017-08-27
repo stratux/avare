@@ -56,6 +56,8 @@ import com.ds.avare.views.GlassView;
 import com.ds.avare.views.ThreeDSurfaceView;
 
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author zkhan
@@ -97,6 +99,7 @@ public class ThreeDFragment extends StorageServiceGpsListenerFragment {
     private static final int MESSAGE_INIT = 0;
     private static final int MESSAGE_TEXT = 1;
     private static final int MESSAGE_ERROR = 2;
+    private static final int MESSAGE_OBSTACLES = 3;
     private static final int MESSAGE_AGL = 4;
 
     @Override
@@ -309,20 +312,8 @@ public class ThreeDFragment extends StorageServiceGpsListenerFragment {
                             Traffic.draw(mService, mAreaMapper, mRenderer);
 
                             // Draw obstacles
-                            if(mService != null) {
-                                LinkedList<Obstacle> obs = mService.getObstacles();
-                                if (null != obs) {
-
-                                    Vector4d obstacles[] = new Vector4d[obs.size()];
-                                    int count = 0;
-                                    for (Obstacle ob : obs) {
-                                        obstacles[count++] = mAreaMapper.gpsToAxis(ob.getLongitude(), ob.getLatitude(), ob.getHeight(), 0);
-                                    }
-
-                                    if (obstacles != null && obstacles.length != 0) {
-                                        mRenderer.setObstacles(obstacles);
-                                    }
-                                }
+                            if (mObstacles != null && mObstacles.length != 0) {
+                                mRenderer.setObstacles(mObstacles);
                             }
 
                             // Our position
@@ -544,10 +535,12 @@ public class ThreeDFragment extends StorageServiceGpsListenerFragment {
             else if (msg.what == MESSAGE_ERROR) {
                 mGlassView.setStatus((String) msg.obj);
             }
+            else if (msg.what == MESSAGE_OBSTACLES) {
+                mObstacles = (Vector4d[]) msg.obj;
+            }
             else if (msg.what == MESSAGE_AGL) {
                 mGlassView.setAgl((String) msg.obj);
             }
         }
     };
-
 }

@@ -2066,20 +2066,6 @@ Redistribution and use in source and binary forms, with or without modification,
         <item>100000</item>
     </string-array>
 
-    <string-array name="WindsAloftAltitude">
-        <item>3</item>
-        <item>6</item>
-        <item>9</item>
-        <item>12</item>
-        <item>18</item>
-        <item>24</item>
-        <item>30</item>
-        <item>24</item>
-        <item>34</item>
-        <item>39</item>
-    </string-array>
-
-
     <string-array name="LayerType">
         <item>No Layer</item>
         <item>METAR</item>
@@ -2130,6 +2116,19 @@ Redistribution and use in source and binary forms, with or without modification,
         <item>V</item>
         <item>W</item>
         <item>Y</item>
+    </string-array>
+
+    <string-array name="WindsAloftAltitude">
+        <item>3</item>
+        <item>6</item>
+        <item>9</item>
+        <item>12</item>
+        <item>18</item>
+        <item>24</item>
+        <item>30</item>
+        <item>24</item>
+        <item>34</item>
+        <item>39</item>
     </string-array>
 
     <string-array name="Tips">

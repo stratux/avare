@@ -37,15 +37,32 @@
 
         </android.support.design.widget.CoordinatorLayout>
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:minHeight="?attr/actionBarSize"
-            android:background="@color/tabBackground"
-            app:tabTextColor="@color/tabTextColor"
-            app:tabSelectedTextColor="@color/tabSelectedTextColor"
-            app:tabIndicatorColor="@color/tabIndicatorColor" />
+            android:layout_height="?attr/actionBarSize">
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/menu_button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/ic_layers_white_24dp"-->
+                <!--android:layout_marginRight="20dp"-->
+                <!--android:layout_above="@+id/empty_view"-->
+                <!--android:layout_toLeftOf="@+id/location_button_center"-->
+                <!--android:padding="20dp" />-->
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:minHeight="?attr/actionBarSize"
+                android:background="@color/tabBackground"
+                app:tabTextColor="@color/tabTextColor"
+                app:tabSelectedTextColor="@color/tabSelectedTextColor"
+                app:tabIndicatorColor="@color/tabIndicatorColor"
+                android:layout_weight="1" />
+        </LinearLayout>
 
     </LinearLayout>
 

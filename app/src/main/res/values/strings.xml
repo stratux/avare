@@ -416,6 +416,16 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="prefTipLabel">&quot;Show Tips&quot;</string>
     <string name="prefTipSummary">&quot;Select to display tips when the application starts&quot;</string>
 
+    <string name="layerNexrad">Nexrad</string>
+    <string name="layerNexradLabel">Show Nexrad</string>
+    <string name="layerNexradSummary">Show Nexrad data on the map</string>
+    <string name="layerMetars">METARs</string>
+    <string name="layerMetarsLabel">Show METARs</string>
+    <string name="layerMetarsSummary">Show METARs indicators on the map</string>
+    <string name="layerPlate">Plate</string>
+    <string name="layerPlateLabel">Show Approach Plate</string>
+    <string name="layerPlateSummary">Show the selected approach plate on the map</string>
+
     <string name="sync">Sync Data</string>
     <string name="syncSummary">Save/Load Avare data on Google Drive</string>
     <string name="Backup">Backup</string>
@@ -536,10 +546,8 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="RegisterActivityPreferenceKey">REGISTER_ACTIVITY_PREFERENCE_KEY</string>
     <string name="SyncActivityPreferenceKey">SYNC_ACTIVITY_PREFERENCE_KEY</string>
 
-    <string name="b1map">Remove Button 1 in Map (Restart Required)</string>
-    <string name="b1plate">Remove Button 1 in Plate (Restart Required)</string>
-    <string name="b2plate">Remove Button 2 in Plate (Restart Required)</string>
-    <string name="b3plate">Remove Button 3 in Plate (Restart Required)</string>
+    <string name="b2plate">Remove Timer Button in Plate</string>
+    <string name="b3plate">Remove Tag Button in Plate</string>
     <string name="UIConfiguration">UI Configuration</string>
 
     <string name="ShowLabelMETARS">&quot;Label for ADSB METARs&quot;</string>
@@ -563,7 +571,6 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="Obstacles">Obstacles</string>
     <string name="ObstaclesSummary">Show obstacles on map</string>
     <string name="ObstaclesLabel">Show Obstacles</string>
-
     <string name="NearestMETARRadius">&quot;NearestMETARRadius&quot;</string>
     <string name="NearestMETARRadiusLabel">&quot;Nearest METAR Search Radius&quot;</string>
     <string name="NearestMETARRadiusSummary">&quot;Select the distance to the nearest METAR station reported when METAR is unavailable on a field.&quot;</string>

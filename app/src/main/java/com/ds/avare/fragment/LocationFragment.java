@@ -13,6 +13,7 @@ package com.ds.avare.fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.PorterDuff;
 import android.location.Location;
 import android.net.Uri;
@@ -36,10 +37,12 @@ import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 import com.ds.avare.ChartsDownloadActivity;
 import com.ds.avare.MainActivity;
@@ -58,6 +61,7 @@ import com.ds.avare.storage.StringPreference;
 import com.ds.avare.touch.GestureInterface;
 import com.ds.avare.touch.LongTouchDestination;
 import com.ds.avare.utils.DecoratedAlertDialogBuilder;
+import com.ds.avare.utils.Drawing;
 import com.ds.avare.utils.GenericCallback;
 import com.ds.avare.utils.Helper;
 import com.ds.avare.utils.InfoLines.InfoLineFieldLoc;
@@ -67,7 +71,6 @@ import com.ds.avare.webinfc.WebAppMapInterface;
 
 import java.io.File;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -109,7 +112,9 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
     private AlertDialog mGpsWarnDialog;
 
     private ImageButton mLayersButton;
+    private ImageButton mSettingsButton;
     private ImageButton mChartsButton;
+    private Spinner mChartsButtonSpinner;
     private ImageButton mCenterButton;
     private ImageButton mDrawClearButton;
     private ImageButton mDrawButton;
@@ -119,9 +124,8 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
     private WebAppMapInterface mInfc;
 
     private AppCompatSpinner mChartSpinnerBar;
-    private AppCompatSpinner mLayerSpinnerBar;
     private AppCompatSpinner mChartSpinnerNav;
-    private AppCompatSpinner mLayerSpinnerNav;
+    private AppCompatSpinner mChartSpinnerButton;
     private AppCompatCheckBox mTracksCheckBox;
     private AppCompatCheckBox mSimulationCheckBox;
 
@@ -396,7 +400,7 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
         mChartsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mChartSpinnerNav.performClick();
+                mChartSpinnerButton.performClick();
             }
         });
 
@@ -405,7 +409,31 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
         mLayersButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mLayerSpinnerNav.performClick();
+                RelativeLayout layersList = (RelativeLayout) v.getRootView().findViewById(R.id.location_preferences);
+                if( layersList.getVisibility() == View.VISIBLE) {
+                    layersList.setVisibility(View.INVISIBLE);
+                } else {
+                    layersList.setVisibility(View.VISIBLE);
+                    RelativeLayout settingsList = (RelativeLayout) v.getRootView().findViewById(R.id.location_settings);
+                    settingsList.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+
+        mSettingsButton = (ImageButton) view.findViewById(R.id.location_button_settings);
+        mSettingsButton.getBackground().setAlpha(255);
+        mSettingsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RelativeLayout settingsList = (RelativeLayout) v.getRootView().findViewById(R.id.location_settings);
+                if( settingsList.getVisibility() == View.VISIBLE) {
+                    settingsList.setVisibility(View.INVISIBLE);
+                } else {
+                    settingsList.setVisibility(View.VISIBLE);
+                    RelativeLayout layersList = (RelativeLayout) v.getRootView().findViewById(R.id.location_preferences);
+                    layersList.setVisibility(View.INVISIBLE);
+                }
             }
         });
 
@@ -465,11 +493,15 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
                     mLocationView.setDraw(true);
                     mTouchMode = com.ds.avare.touch.Constants.TouchMode.DRAW_MODE;
                     mDrawClearButton.setVisibility(View.VISIBLE);
+                    mDrawButton.setColorFilter(new ColorMatrixColorFilter(Drawing.NEGATIVE));
+                    mDrawButton.getBackground().setColorFilter(0xFFBBBBBB, PorterDuff.Mode.MULTIPLY);
                 }
                 else {
                     mLocationView.setDraw(false);
                     mTouchMode = com.ds.avare.touch.Constants.TouchMode.PAN_MODE;
                     mDrawClearButton.setVisibility(View.INVISIBLE);
+                    mDrawButton.clearColorFilter();
+                    mDrawButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
                 }
             }
         });
@@ -541,16 +573,17 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
                 }
         );
 
-        MenuItem layerMenuItem = ((MainActivity) getActivity()).getNavigationMenu().findItem(R.id.nav_action_map_layer);
-        mLayerSpinnerNav = (AppCompatSpinner) MenuItemCompat.getActionView(layerMenuItem);
-        setupLayerSpinner(
-                mLayerSpinnerNav,
+        mChartsButtonSpinner = (Spinner) view.findViewById(R.id.location_button_charts_spin);
+        mChartSpinnerButton = (AppCompatSpinner) mChartsButtonSpinner;
+        setupChartSpinner(
+                mChartSpinnerButton,
+                Integer.valueOf(mPref.getChartType()),
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        mPref.setLayerType(LAYER_TYPES[position]);
-                        mLocationView.setLayerType(mPref.getLayerType());
-                        mLayerSpinnerBar.setSelection(position, false);
+                        mPref.setChartType(String.valueOf(position));
+                        mChartSpinnerBar.setSelection(position, false);
+                        mLocationView.forceReload();
                         closeDrawer();
                     }
 
@@ -558,7 +591,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
                     public void onNothingSelected(AdapterView<?> parent) { }
                 }
         );
-        mLocationView.setLayerType(mPref.getLayerType());
 
         MenuItem tracksMenuItem = ((MainActivity) getActivity()).getNavigationMenu().findItem(R.id.nav_action_map_tracks);
         mTracksCheckBox = (AppCompatCheckBox) MenuItemCompat.getActionView(tracksMenuItem);
@@ -806,7 +838,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
 
     private void setChartsAndLayersButtonVisibility() {
         mChartsButton.setVisibility(mPref.getHideToolbar() ? View.VISIBLE : View.INVISIBLE);
-        mLayersButton.setVisibility(mPref.getHideToolbar() ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void setDrawButtonVisibility() {
@@ -835,6 +866,7 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
         );
         mLayersButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
         mChartsButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
+        mSettingsButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
         mDrawClearButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
         mDrawButton.getBackground().setColorFilter(0xFF444444, PorterDuff.Mode.MULTIPLY);
     }
@@ -1134,22 +1166,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
                 }
         );
 
-        MenuItem layerMenuItem = menu.findItem(R.id.action_layer);
-        mLayerSpinnerBar = (AppCompatSpinner) MenuItemCompat.getActionView(layerMenuItem);
-        setupLayerSpinner(
-                mLayerSpinnerBar,
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        mPref.setLayerType(LAYER_TYPES[position]);
-                        mLocationView.setLayerType(mPref.getLayerType());
-                        mLayerSpinnerNav.setSelection(position, false);
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) { }
-                }
-        );
     }
 
     // Callback to show the location info popup on LocationView
@@ -1168,15 +1184,6 @@ public class LocationFragment extends StorageServiceGpsListenerFragment implemen
         }
 
         return false;
-    }
-
-    private void setupLayerSpinner(AppCompatSpinner spinner, AdapterView.OnItemSelectedListener selectedListener) {
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, LAYER_TYPES);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(adapter);
-        spinner.setSelection(Arrays.binarySearch(LAYER_TYPES, mPref.getLayerType()), false);
-        spinner.setOnItemSelectedListener(selectedListener);
     }
 
     private void startTracks() {
