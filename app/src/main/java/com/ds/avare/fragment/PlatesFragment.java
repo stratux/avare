@@ -12,6 +12,7 @@ Redistribution and use in source and binary forms, with or without modification,
 package com.ds.avare.fragment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.location.Location;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 
 import com.ds.avare.MainActivity;
+import com.ds.avare.PlatesTagActivity;
 import com.ds.avare.R;
 import com.ds.avare.animation.TwoButton;
 import com.ds.avare.animation.TwoButton.TwoClickListener;
@@ -69,6 +71,7 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
     private Button mAirportButton;
     private Button mPlatesButton;
     private Button mApproachButton;
+    private Button mPlatesTagButton;
     private Button mPlatesTimerButton;
     private Chronometer mChronometer;
     private AlertDialog mPlatesPopup;
@@ -100,7 +103,7 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
     /**
      *
      */
-    private static String getNameFromPath(String name) {
+    public static String getNameFromPath(String name) {
         if(null == name) {
             return null;
         }
@@ -126,6 +129,23 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
             String aname = getNameFromPath(mService.getPlateDiagram().getName());
             if(aname != null) {
                 float ret[];
+
+                // find in user's own tags first
+                LinkedList<String> tags = PlatesTagActivity.getTagsStorageFromat(mPref.getGeotags());
+                for(String t : tags) {
+                    String toks[] = t.split(",");
+                    if(toks[0].equals(aname)) {
+                       /*
+                        * Found
+                        */
+                        float matrix[] = new float[4];
+                        matrix[0] = (float)Double.parseDouble(toks[1]);
+                        matrix[1] = (float)Double.parseDouble(toks[2]);
+                        matrix[2] = (float)Double.parseDouble(toks[3]);
+                        matrix[3] = (float)Double.parseDouble(toks[4]);
+                        return matrix;
+                    }
+                }
 
                 /*
                  * EXIF
@@ -370,6 +390,24 @@ public class PlatesFragment extends StorageServiceGpsListenerFragment implements
             }
         });
 
+        mPlatesTagButton = (Button)view.findViewById(R.id.plates_button_tag);
+        mPlatesTagButton.getBackground().setAlpha(255);
+        mPlatesTagButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mService != null && mService.getPlateDiagram() != null) {
+                    String name = mService.getPlateDiagram().getName();
+                    if (name != null) {
+                        Intent intent = new Intent(getActivity(), PlatesTagActivity.class);
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
+
+        if(mPref.removeB3Plate()) {
+            mPlatesTagButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void setPlateFromPos(int pos) {

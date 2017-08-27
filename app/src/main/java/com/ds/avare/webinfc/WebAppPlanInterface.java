@@ -679,7 +679,7 @@ public class WebAppPlanInterface implements Observer {
     /** 
      * JS polls every second to get all plan data.
      */
-    private String getPlanData() {
+    public String getPlanData() {
     	Plan plan = mService.getPlan();
     	
         /*

@@ -29,6 +29,11 @@ authors: zkhan, jlmcgraw
             android:key="@string/Root"
             android:summary="@string/RootSummary"
             android:title="@string/RootLabel" />
+        <com.ds.avare.utils.EditTextPreferenceWithSummary
+            android:defaultValue="http://127.0.0.1/"
+            android:key="@string/PrivateServer"
+            android:summary="@string/PrivateServerSummary"
+            android:title="@string/PrivateServerLabel" />
         <com.ds.avare.utils.ListPreferenceWithSummary
             android:defaultValue="@string/Zero"
             android:entries="@array/CyclePrompt"
@@ -391,6 +396,11 @@ authors: zkhan, jlmcgraw
                 android:key="@string/prefTabTools"
                 android:summary="@string/GPSSummary"
                 android:title="@string/Tools" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="@string/GameTFR"
+                android:summary="@string/GameTFRSummary"
+                android:title="@string/GameTFRLabel" />
         </PreferenceScreen>
     </PreferenceScreen>
 
@@ -521,6 +531,11 @@ authors: zkhan, jlmcgraw
             android:key="@string/b2plate"
             android:summary="@string/b2plate"
             android:title="@string/b2plate" />
+
+        <CheckBoxPreference
+            android:key="@string/b3plate"
+            android:summary="@string/b3plate"
+            android:title="@string/b3plate" />
 
         <CheckBoxPreference
             android:defaultValue="false"

@@ -160,6 +160,12 @@ public class Preferences {
         if (val.equals("0")) {
             return "http://www.apps4av.org/new/";
         }
+        else if (val.equals("2")) {
+            return "http://avare.kitepilot.net/new/";
+        }
+        else if (val.equals("3")) {
+            return mPref.getString(mContext.getString(R.string.PrivateServer), "http://127.0.0.1/");
+        }
         return ("");
     }
 
@@ -1168,6 +1174,10 @@ public class Preferences {
         return mPref.getBoolean(mContext.getString(R.string.b1map), false);
     }
 
+    public boolean removeB3Plate() {
+        return mPref.getBoolean(mContext.getString(R.string.b3plate), false);
+    }
+
     public int getRateAskCount() {
         return mPref.getInt("rateAskLastCount", 0);
     }
@@ -1216,6 +1226,30 @@ public class Preferences {
         } catch (Exception x) {
             return 39;
         }
+    }
+
+
+    /**
+      * @return
+      */
+     public String getGeotags() {
+        return mPref.getString(mContext.getString(R.string.Geotag), "");
+     }
+
+
+    /**
+      * @param tags
+      */
+    public void setGeotags(String tags) {
+        mPref.edit().putString(mContext.getString(R.string.Geotag), tags).commit();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean showGameTFRs() {
+        return mPref.getBoolean(mContext.getString(R.string.GameTFR), false);
     }
 }
 

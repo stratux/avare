@@ -535,12 +535,8 @@ public class LocationView extends View implements OnTouchListener {
      * @param ctx
      */
     private void drawTFR(Canvas canvas, DrawingContext ctx) {
-        if(ctx.pref.useAdsbWeather()) {
-            TFRShape.draw(ctx, mService.getAdsbTFRShapes(), null == mPointProjection);
-        }
-        else {
-            TFRShape.draw(ctx, mService.getTFRShapes(), null == mPointProjection);
-        }
+        TFRShape.draw(ctx, mService.getAdsbTFRShapes(), null == mPointProjection);
+        TFRShape.draw(ctx, mService.getTFRShapes(), null == mPointProjection);
     }
 
     /**
@@ -815,15 +811,6 @@ public class LocationView extends View implements OnTouchListener {
     }
 
     /***
-     */
-    private void drawGameTFRs(DrawingContext ctx) {
-        if(mPointProjection == null) {
-            mService.getGameTFRs().draw(ctx);
-        }
-
-    }
-
-    /***
      * Draw the edge distance markers if configured to do so
      * @param canvas what to draw them on
      */
@@ -924,7 +911,6 @@ public class LocationView extends View implements OnTouchListener {
         drawTraffic(canvas, ctx);
         drawObstacles(canvas, ctx);
         drawTFR(canvas, ctx);
-        drawGameTFRs(ctx);
         drawShapes(canvas, ctx);
         drawAirSigMet(canvas, ctx);
         drawTracks(canvas, ctx);
@@ -1186,6 +1172,7 @@ public class LocationView extends View implements OnTouchListener {
         private Double lon;
         private Double lat;
         private String tfr = "";
+        private String tfra = "";
         private String textMets = "";
         private String sua;
         private String layer;
@@ -1197,6 +1184,24 @@ public class LocationView extends View implements OnTouchListener {
         private String elev;
         private Vector<NavAid> navaids;
         private ArrayList<LongPressedDestination> locations;
+
+
+        private String getTfrTextOnTouch(LinkedList<TFRShape> shapes) {
+            String out = "";
+            if(null != shapes) {
+                for(int shape = 0; shape < shapes.size(); shape++) {
+                    TFRShape cshape = shapes.get(shape);
+                    /*
+                     * Get TFR text
+                     */
+                    String txt = cshape.getTextIfTouched(lon, lat);
+                    if(null != txt) {
+                        out += txt + "\n--\n";
+                    }
+                }
+            }
+            return out;
+        }
 
         /* (non-Javadoc)
          * @param vals[0] longitude of point to find. mutually exclusive with vals[2]
@@ -1361,33 +1366,17 @@ public class LocationView extends View implements OnTouchListener {
             if(isCancelled())
                 return null;
 
-            /*
-             * Get TFR tfr if touched on its top
-             */
-            LinkedList<TFRShape> shapes = null;
             List<AirSigMet> mets = null;
             if(null != mService) {
                 if(mPref.useAdsbWeather()) {
-                    shapes = mService.getAdsbTFRShapes();
                     mets = mService.getAdsbWeather().getAirSigMet();
                 }
                 else {
-                    shapes = mService.getTFRShapes();
                     mets = mService.getInternetWeatherCache().getAirSigMet();
                 }
             }
-            if(null != shapes) {
-                for(int shape = 0; shape < shapes.size(); shape++) {
-                    TFRShape cshape = shapes.get(shape);
-                    /*
-                     * Set TFR tfr
-                     */
-                    String txt = cshape.getTextIfTouched(lon, lat);
-                    if(null != txt) {
-                        tfr += txt + "\n--\n";
-                    }
-                }
-            }
+
+
             /*
              * Air/sigmets
              */
@@ -1502,12 +1491,11 @@ public class LocationView extends View implements OnTouchListener {
                 }
                 else {
                     boolean inWeatherOld = mService.getInternetWeatherCache().isOld(mPref.getExpiryTime());
-                    if(inWeatherOld) { // expired weather and TFR text do not show
+                    if(inWeatherOld) { // expired weather does not show
                         taf = null;
                         metar = null;
                         aireps = null;
                         textMets = null;
-                        tfr = null;
                         wa = null;
                     }
                 }
@@ -1519,7 +1507,9 @@ public class LocationView extends View implements OnTouchListener {
                 if(null != wa) {
                     wa.updateStationWithLocation(lon, lat, mGpsParams.getDeclinition());
                 }
-                mLongTouchDestination.tfr = tfr;
+                tfr = getTfrTextOnTouch(mService.getTFRShapes());
+                tfra = getTfrTextOnTouch(mService.getAdsbTFRShapes());
+                mLongTouchDestination.tfr = tfr + "\n" + tfra;
                 mLongTouchDestination.taf = taf;
                 mLongTouchDestination.metar = metar;
                 mLongTouchDestination.airep = aireps;
